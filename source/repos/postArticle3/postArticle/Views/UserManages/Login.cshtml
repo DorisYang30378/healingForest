@@ -1,0 +1,115 @@
+﻿@model postArticle.viewmodel.RegisterViewModel
+@{
+    ViewBag.Title = "Login";
+}
+<style>
+    body {
+        background-color: #A4DA8A;
+    }
+
+    .window_content {
+        position: relative;
+        width: 470px;
+        height: 445px;
+        margin: auto;
+        top: 20px;
+        border-radius: 5px;
+        background-color: #ffffff;
+    }
+
+    @@media screen and (max-width:769px) {
+        .window_content {
+            position: relative;
+            width: 100%;
+            height: 445px;
+            margin: auto;
+            top: 20px;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+    }
+</style>
+
+
+<h1 style="text-align: center; padding: 50px 0px 0px 0px; color: white;">療癒之森</h1>
+
+
+<div class="container">
+    <div class="window_content">
+        <div class="window_content_bodt">
+            @using (Html.BeginForm())
+            {
+
+                <div class="form-group">
+
+                    <div class="" style="background-color:#ffffff;">
+                        <div style=" padding-bottom:10px; padding-top:20px; text-align:center; font-size:30px; ">登入</div>
+
+
+                        <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                            @Html.TextBoxFor(model => model.userManage.Account, new { @placeholder = "請輸入帳號", @class = "form-control", @style = "background-color:#F2ECE2;", @autofocus = "autofocus" })
+                            @Html.ValidationMessageFor(model => model.userManage.Account, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                            @Html.PasswordFor(model => model.userManage.Password, new { @placeholder = "請輸入密碼", @class = "form-control", @style = "background-color:#F2ECE2;", @required = "required" })
+                            @Html.ValidationMessageFor(model => model.userManage.Password, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="text-right" style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                            @Html.CheckBoxFor(model => model.rememberPassword)
+                            @Html.Label("記住密碼")
+                        </div>
+                        <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                            <input type="submit" value="登入" class="btn btn-default  form-control" , style="background-color:#97CD7D;" />
+                        </div>
+
+                        @Html.ActionLink("註冊帳號", "Create", null, null, new { style = "float:left; padding-left:80px" })
+
+                        @Html.ActionLink("忘記密碼", "forget_password", null, null, new { style = "float:right; padding-right:80px" })
+
+
+                    </div>
+
+
+                </div>
+
+            }
+        </div>
+    </div>
+</div>
+
+@*
+    <div class="row">
+        <div class="col-md-4 col-xs-4 "></div>
+
+        @using (Html.BeginForm())
+        {
+
+            <div class="form-group col-md-4 col-xs-4  jumbotron" style="background-color:#ffffff;">
+                <div class="row" style="padding-bottom:10px; text-align:center; font-size:30px; ">登入</div>
+
+                <div style="padding-bottom:10px;">
+                    @Html.TextBoxFor(model => model.Name, new { @placeholder = "請輸入暱稱", @class = "form-control", @style = "background-color:#F2ECE2;", @autofocus = "autofocus" })
+                    @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                </div>
+                <div style="padding-bottom:10px;">
+                    @Html.PasswordFor(model => model.Password, new { @placeholder = "請輸入密碼", @class = "form-control", @style = "background-color:#F2ECE2;", @required = "required" })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+                <div class="text-right">
+                    @Html.CheckBoxFor(model => model.rememberPassword)
+                    @Html.Label("記住密碼")
+                </div>
+                <input type="submit" value="登入" class="btn btn-default  form-control" , style="background-color:#97CD7D;" />
+                @Html.ActionLink("註冊帳號", "Sign")
+                @Html.ActionLink("忘記密碼", "forget_password")
+            </div>
+
+        }
+
+        <div class="col-md-4 col-xs-4 col-lg-4"></div>
+    </div>*@
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

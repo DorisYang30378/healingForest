@@ -1,0 +1,223 @@
+﻿@model postArticle.viewmodel.DemoCharViewModel
+
+@{
+    ViewBag.Title = "DemoChar";
+    var ChatRoomLog = Model.ChatRoomLog.ToList();
+    var ChatRoom = Model.ChatRoom.ToList();
+    var ChatRoomName = Model.ChatRoomName;
+}
+
+
+
+
+<style>
+    body {
+        background-color: #A4DA8A;
+        font-family: Arial, sans-serif;
+    }
+    .back-container {
+       
+        margin: 0 auto;
+        background-color: #b1e39c;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .chat-room-list {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .chat-room-card {
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+        .chat-room-card h5 {
+            margin-top: 0;
+        }
+
+        .chat-room-card p {
+            margin-bottom: 0;
+        }
+
+    .chat-log {
+        height: calc(100vh - 120px);
+        overflow-y: auto;
+        padding: 10px;
+    }
+
+    .chat-message {
+        background-color: #f5f5f5;
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 10px;
+        display: inline-block;
+        max-width: 80%;
+    }
+
+        .chat-message.right {
+            background-color: #effff1;
+            margin-left: auto;
+        }
+
+        .chat-message.left {
+            background-color: #f5f5f5;
+            margin-right: auto;
+        }
+
+        .chat-message table {
+            width: 100%;
+        }
+
+        .chat-message th {
+            text-align: left;
+            font-weight: bold;
+            padding-bottom: 5px;
+        }
+
+        .chat-message td {
+            padding-bottom: 5px;
+            white-space: pre-line; /* 處理換行 */
+        }
+
+    .form-control {
+        width: 100%;
+    }
+
+    .send-button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+        .send-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+
+<div  class="container back-container">
+    <div class="row">
+        <div style="background-color: #a2ceb4; border-radius: 5px; " class="col-xl-5 chat-room-list">
+            <div class="container">
+                @foreach (var item in ChatRoom)
+                {
+                    <div class="chat-room-card">
+                        <h5>@Html.DisplayFor(modelItem => item.ChatRoomName)</h5>
+                        <p>@Html.DisplayFor(modelItem => item.member)</p>
+                        <p>@Html.ActionLink("進入聊天室", "OtherChatRoom", new { id = item.ChatroomID })</p>
+                    </div>
+                }
+            </div>
+        </div>
+        
+        <div  class="col-xl-7">
+            <h2>@ChatRoomName</h2>
+            <div class="chat-log">
+
+                @using (Html.BeginForm("CreateCharLog", "CharRoom", FormMethod.Post, new { id = "LogPanel" }))
+                {
+                    foreach (var item in ChatRoomLog)
+                    {
+                        <div class="row" style="position:relative">
+                            <div class="col-auto chat-message @(item.UserManage.UserName == Model.MyUser ? "right" : "left")">
+                                <table>
+                                    <tr>
+                                        <th>@Html.DisplayFor(modelItem => item.UserManage.UserName)</th>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Content)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Time)
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    }
+
+                    @Html.EditorFor(model => model.Log, new { htmlAttributes = new { @class = "form-control", id = "Log", value = "" } })
+                    <button type="button" id="sendLog" class="send-button">送出</button>
+                }
+            </div>
+        </div>
+            
+        </div>
+</div>
+
+<div>
+    <button class="btn btn-warning" type="button" onclick="location.href='@Url.Action("ArticleIndex", "Home")'">返回首頁</button>
+</div>
+
+
+
+@section scripts {
+    <!--脚本引用-->
+    <!--jQuery库是必需的，默认在_Layout.cshtml中已经引用。-->
+    <!--引用SignalR库-->
+    <script src="~/Scripts/jquery.signalR-2.4.3.min.js"></script>
+    <!--引用自动生成的SignalR hub脚本-->
+    <script src="~/signalr/hubs"></script>
+    <!--SignalR脚本，用于更新聊天页面和发送消息-->
+    <script>
+        $(function () {
+            // 引用自动生成的hub代理
+            var chat = $.connection.chatHub;
+            // 创建一个函数，让hub调用它来显示消息
+            chat.client.addNewMessageToPage = function (UserID)
+            {
+                if (@Model.myUserId == UserID)
+                {
+                    var Log = $('#Log').val();
+
+                    var url = '@Url.Action("DemoChar", "CharRoom")';
+                    var data = null;
+
+                    $.ajax({
+                        url: url,
+                        type: 'POST',
+                        data: data,
+                        success: function (result)
+                        {
+                            // 更新部分內容
+                            $('#PanelReload').html(result);
+                            $('#Log').val(Log);
+                        }
+                    });
+
+
+
+                }
+
+            };
+
+
+            // 设置初始焦点在消息输入框
+            $('#Log').focus();
+            // 启动连接
+            $.connection.hub.start().done(function ()
+            {
+                $('#sendLog').click(function ()
+                {
+                    var url = '@Url.Action("CreateCharLog", "CharRoom")';
+                    var data = $('#LogPanel').serialize();
+                    makeAjaxRequest(url, data);
+                    // 调用hub上的Send方法
+                    chat.server.send(@Model.OtherUserId);
+                });
+            });
+        });
+    </script>
+
+
+}

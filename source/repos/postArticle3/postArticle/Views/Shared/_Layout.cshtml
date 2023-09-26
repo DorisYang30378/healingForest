@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html >
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+
+
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title - 療癒之森</title>
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	@Scripts.Render("~/bundles/jquery")
+
+
+</head>
+<body>
+    <script>
+        function makeAjaxRequest(redirectUrl, requestData)
+        {
+            $.ajax({
+                url: redirectUrl,
+                type: 'POST',
+                data: requestData,
+                success: function (result)
+                {
+                    // 更新部分內容
+                    $('#PanelReload').html(result);
+                }
+            });
+		}
+
+
+    </script>
+    <style>
+        /* 自訂樣式 */
+		.navbar {
+			background-color: #A4DA8A; /* 背景顏色 */
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* 陰影效果 */
+		}
+
+        .navbar-brand {
+            font-family: Arial, sans-serif; /* 字體 */
+            font-size: 34px; /* 字體大小 */
+        }
+
+        .navbar-nav .nav-link {
+            color: white; /* 文字顏色 */
+            font-size: 24px; /* 字體大小 */
+        }
+
+            .navbar-nav .nav-link:hover {
+                color: #7785fc; /* 滑鼠懸停時的文字顏色 */
+            }
+
+        /* 選取項目樣式 */
+        .navbar-nav .active > .nav-link {
+            color: #7785fc; /* 選取項目的文字顏色 */
+            font-weight: bold; /* 文字粗體 */
+        }
+		#searchform {
+			margin-right: 30px;
+		}
+    </style>
+
+    <div id="PanelReload">
+        <nav class="navbar navbar-expand-xl navbar-dark fixed-top">
+			<div class="container">
+				@Html.ActionLink("療癒之森", "ArticleIndex", "Home", new { area = "" }, new { @class = "navbar-brand" })
+				
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="mynavbar">
+
+					@if (Session["UserID"] != null)
+					{
+
+
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">@Html.ActionLink("首頁", "ArticleIndex", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+							<li class="nav-item">@Html.ActionLink("發布文章", "ArticlePost", "ArticleManage", new { area = "" }, new { @class = "nav-link" })</li>
+							<li class="nav-item">@Html.ActionLink("聊天室", "FindChatUser", "CharRoom", new { area = "" }, new { @class = "nav-link" })</li>
+							<li class="nav-item">@Html.ActionLink("專家申請", "Apply", "Expert", new { area = "" }, new { @class = "nav-link" })</li>
+							
+								
+						</ul>
+						@*
+						using (Html.BeginForm("ArticleIndex", "Home", FormMethod.Post, new { id = "searchform", @class = "d-flex ms-xxl-auto" }))
+						{
+							<input class="form-control me-2" type="text" name="message" placeholder="Search">
+							<button class="btn btn-outline-success" type="submit">搜尋</button>
+						}
+
+
+
+			< form class="d-flex ms-xxl-auto " id="searchform" method="POST" action="/Home/ArticleIndex">
+				<input class="form-control me-2" type="text" placeholder="Search" name="message" />
+				<button class="btn btn-outline-success" type="submit">搜尋</button>
+			</form>
+						*@
+						<ul class="navbar-nav ms-auto">
+							<li class="nav-item">@Html.ActionLink("登出", "Logout", "SignIn", new { area = "" }, new { @class = "nav-link" })</li>
+						</ul>
+
+					}
+					else
+					{
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">@Html.ActionLink("首頁", "ArticleIndex", "Home", new { area = "" }, new { @class = "nav-link" })</li>
+						</ul>
+						<ul class="navbar-nav ms-auto">
+							<li class="nav-item">@Html.ActionLink("登入", "Login", "UserManages", new { area = "" }, new { @class = "nav-link" })</li>
+							<li class="nav-item">@Html.ActionLink("註冊", "Create", "UserManages", new { area = "" }, new { @class = "nav-link" })</li>
+
+						</ul>
+					}
+				</div>
+			</div>
+
+		</nav>
+
+		<div class="container body-content">
+			<br>
+
+			@RenderBody()
+
+			<hr />
+
+			<footer>
+
+				<p>&copy; @DateTime.Now.Year - 療癒之森</p>
+
+			</footer>
+
+		</div>
+
+	</div>
+	@Scripts.Render("~/bundles/bootstrap")
+
+	@RenderSection("scripts", required: false)
+</body>
+</html>

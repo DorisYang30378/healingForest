@@ -1,0 +1,166 @@
+﻿@model postArticle.viewmodel.RegisterViewModel
+
+@{
+    ViewBag.Title = "療癒之森";
+}
+<style>
+    body {
+        background-color: #A4DA8A;
+    }
+
+    .window_content {
+        position: relative;
+        width: 400px;
+        height: fit-content;
+        margin: 0 auto;
+        top: 20px;
+        padding-bottom: 20px;
+        border-radius: 5px;
+        background-color: #ffffff;
+    }
+
+    .verif {
+        text-align: center;
+        margin-left: 100px;
+    }
+
+        .verif .verif_btn {
+            border: none;
+            color: #cccaca;
+            background-color: #ffffff;
+        }
+
+            .verif .verif_btn:hover {
+                color: #000000;
+            }
+
+    @@media screen and (max-width:769px) {
+        .window_content {
+            position: relative;
+            width: 100%;
+            height: fit-content;
+            margin: 0 auto;
+            top: 20px;
+            padding-bottom: 20px;
+            border-radius: 5px;
+            background-color: #ffffff;
+        }
+    }
+</style>
+
+<h1 style="text-align: center; padding: 50px 0px 0px 0px; color: white;">療癒之森</h1>
+
+
+
+
+<div class="container">
+    <div class="window_content">
+        <div class="window_content_bodt">
+
+            @using (Html.BeginForm("Create", "UserManages", FormMethod.Post, new { @class = "form-container" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div style=" padding-bottom:10px; padding-top:20px; text-align:center; font-size:30px; ">註冊</div>
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="UserName">請輸入名稱</label>
+                        @Html.EditorFor(model => model.userManage.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "暱稱", @style = "background-color:#F2ECE2;" } })
+                        @Html.ValidationMessageFor(model => model.userManage.UserName, "", new { @class = "text-danger" })
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="Account">請輸入帳號</label>
+                        @Html.EditorFor(model => model.userManage.Account, new { htmlAttributes = new { @class = "form-control", placeholder = "帳號", @style = "background-color:#F2ECE2;" } })
+                        @Html.ValidationMessageFor(model => model.userManage.Account, "", new { @class = "text-danger" })
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="Password">請輸入密碼</label>
+                        @Html.PasswordFor(model => model.userManage.Password, new { @class = "form-control", placeholder = "密碼 ", @style = "background-color:#F2ECE2;" })
+                        @Html.ValidationMessageFor(model => model.userManage.UserName, "", new { @class = "text-danger" })
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="ConfirmPassword">再次輸入密碼</label>
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", placeholder = "確認密碼 ", @style = "background-color:#F2ECE2;" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="Email">請輸入信箱</label>
+                        @Html.EditorFor(model => model.userManage.Email, new { htmlattributes = new { @class = "form-control", placeholder = "信箱", @style = "background-color:#F2ECE2;", id = "Email" } })
+                        @Html.ValidationMessageFor(model => model.userManage.Email, "", new { @class = "text-danger" })
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <label class="form-label" for="code">請輸入驗證碼</label>
+                        @Html.EditorFor(model => model.code, new { htmlAttributes = new { @class = "form-control", placeholder = "驗證碼", @style = "background-color:#F2ECE2;" } })
+                        @Html.ValidationMessageFor(model => model.code, "", new { @class = "text-danger" })
+                        <div class="verif">
+                            <button type="button" id="sendCodeButton" class="verif_btn">傳送驗證碼</button>
+                        </div>
+                    </div>
+                    
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        
+                        <label class="form-label" for="Birthday">請選擇生日</label>
+                        @Html.EditorFor(model => model.userManage.Birthday, new { htmlAttributes = new { @class = "form-control", @style = "background-color:#F2ECE2;", type = "date" } })
+                        @Html.ValidationMessageFor(model => model.userManage.Birthday, "", new { @class = "text-danger" })
+                    </div>
+
+
+
+                    <div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+                        <input type="submit" value="Create" class="btn btn-primary" />
+                    </div>
+                </div>
+
+
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        $(function () {
+
+            // 点击发送验证码按钮
+            $('#sendCodeButton').click(function () {
+                // 获取邮箱地址
+                var email = $('#Email').val();
+
+                // 示例代码：使用Ajax发送请求到服务器端发送验证码的接口
+                var Url = '@Url.Action("SendVerificationCode", "UserManages")';
+                $.ajax({
+                    url: Url,
+                    type: 'POST',
+                    data: { email: email },
+                    success: function (response) {
+                        // 发送成功的处理逻辑
+                        if (response.success) {
+                            alert('驗證碼已發送，請查收！');
+                        } else {
+                            alert('發送驗證碼失敗，請重試！');
+                        }
+                    },
+                    error: function () {
+                        // 发送失败的处理逻辑
+                        alert('發送驗證碼失敗，請重試！');
+                    }
+                });
+            });
+        });
+    </script>
+}
+

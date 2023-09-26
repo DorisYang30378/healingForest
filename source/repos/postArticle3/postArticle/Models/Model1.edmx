@@ -1,0 +1,1215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="healingForestModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="56" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="ImageURL" Type="varchar" MaxLength="256" />
+          <Property Name="Classification" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="Likes" Type="int" />
+          <Property Name="ArticleType" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="Time" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Chatroom">
+          <Key>
+            <PropertyRef Name="ChatroomID" />
+          </Key>
+          <Property Name="ChatroomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ChatRoomName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="member" Type="varchar" MaxLength="56" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ChatroomLog">
+          <Key>
+            <PropertyRef Name="ChatroomLogID" />
+          </Key>
+          <Property Name="ChatroomLogID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ChatroomID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Checkin">
+          <Key>
+            <PropertyRef Name="CheckinID" />
+          </Key>
+          <Property Name="CheckinID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CheckinRewardsID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CheckinRewards">
+          <Key>
+            <PropertyRef Name="CheckinRewardsID" />
+          </Key>
+          <Property Name="CheckinRewardsID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CheckinDate" Type="date" Nullable="false" />
+          <Property Name="ExperienceValue" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Collect">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ArticleID" Type="int" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExpertAnswer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="QuestionID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="AnswerContent" Type="varchar" MaxLength="2048" Nullable="false" />
+          <Property Name="AnswerTime" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ExpertApply">
+          <Key>
+            <PropertyRef Name="ExpertApplyID" />
+          </Key>
+          <Property Name="ExpertApplyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpertField" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="ExpertInfo" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Status" Type="varchar" MaxLength="8" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ExpertImgURL" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Remark" Type="varchar" MaxLength="256" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ArticleID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mood">
+          <Key>
+            <PropertyRef Name="MoodID" />
+          </Key>
+          <Property Name="MoodID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Mood" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Report ID" />
+          </Key>
+          <Property Name="Report ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="ArticleID" Type="int" Nullable="false" />
+          <Property Name="ReportContent" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ThanksfulThings">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="ImageURL" Type="varchar(max)" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserManage">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserName" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="Account" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Password" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="32" Nullable="false" />
+          <Property Name="UserType" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="LevelValue" Type="int" Nullable="false" />
+          <Property Name="Experience" Type="float" Nullable="false" />
+          <Property Name="Birthday" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UserQuestion">
+          <Key>
+            <PropertyRef Name="UserQuestionID" />
+          </Key>
+          <Property Name="UserQuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="QuestionTitle" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="QuestionContent" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="QuestionTime" Type="date" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'healingForest.dbo.articleandmessage' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="articleandmessage">
+          <Key>
+            <PropertyRef Name="發布者" />
+            <PropertyRef Name="文章標題" />
+            <PropertyRef Name="文章內容" />
+            <PropertyRef Name="留言人" />
+            <PropertyRef Name="留言內容" />
+          </Key>
+          <Property Name="發布者" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="文章標題" Type="varchar" MaxLength="56" Nullable="false" />
+          <Property Name="文章內容" Type="varchar(max)" Nullable="false" />
+          <Property Name="留言人" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="留言內容" Type="varchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'healingForest.dbo.QA' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="QA">
+          <Key>
+            <PropertyRef Name="發問者" />
+            <PropertyRef Name="標題" />
+            <PropertyRef Name="內容" />
+            <PropertyRef Name="發問時間" />
+            <PropertyRef Name="回答者" />
+            <PropertyRef Name="專家回答" />
+            <PropertyRef Name="回覆時間" />
+          </Key>
+          <Property Name="發問者" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="標題" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="內容" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="發問時間" Type="date" Nullable="false" />
+          <Property Name="回答者" Type="varchar" MaxLength="16" Nullable="false" />
+          <Property Name="專家回答" Type="varchar" MaxLength="2048" Nullable="false" />
+          <Property Name="回覆時間" Type="date" Nullable="false" />
+        </EntityType>
+        <Association Name="chatLog">
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChatroomLog" Type="Self.ChatroomLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chatroom">
+              <PropertyRef Name="ChatroomID" />
+            </Principal>
+            <Dependent Role="ChatroomLog">
+              <PropertyRef Name="ChatroomID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckinReward Record">
+          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="1" />
+          <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CheckinRewards">
+              <PropertyRef Name="CheckinRewardsID" />
+            </Principal>
+            <Dependent Role="Checkin">
+              <PropertyRef Name="CheckinRewardsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CollectArticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Collect" Type="Self.Collect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Collect">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Expert answer questions">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ExpertAnswer" Type="Self.ExpertAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExpertAnswer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Expert received Question">
+          <End Role="UserQuestion" Type="Self.UserQuestion" Multiplicity="1" />
+          <End Role="ExpertAnswer" Type="Self.ExpertAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserQuestion">
+              <PropertyRef Name="UserQuestionID" />
+            </Principal>
+            <Dependent Role="ExpertAnswer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MessageArticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Relationship1">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ThanksfulThings" Type="Self.ThanksfulThings" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ThanksfulThings">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reportsarticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User applies to be an expert">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ExpertApply" Type="Self.ExpertApply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExpertApply">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User asks a question">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="UserQuestion" Type="Self.UserQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserQuestion">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User Message">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User reports">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User Send Message">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ChatroomLog" Type="Self.ChatroomLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ChatroomLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCheckin">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Checkin">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCollect">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Collect" Type="Self.Collect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Collect">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCreateArticle">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1" />
+          <End Role="Article" Type="Self.Article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Article">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserMood">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Mood" Type="Self.Mood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Mood">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="healingForestModelStoreContainer">
+          <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Chatroom" EntityType="Self.Chatroom" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ChatroomLog" EntityType="Self.ChatroomLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Checkin" EntityType="Self.Checkin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CheckinRewards" EntityType="Self.CheckinRewards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Collect" EntityType="Self.Collect" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpertAnswer" EntityType="Self.ExpertAnswer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpertApply" EntityType="Self.ExpertApply" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Mood" EntityType="Self.Mood" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ThanksfulThings" EntityType="Self.ThanksfulThings" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserManage" EntityType="Self.UserManage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UserQuestion" EntityType="Self.UserQuestion" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="articleandmessage" EntityType="Self.articleandmessage" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [articleandmessage].[發布者] AS [發布者], 
+    [articleandmessage].[文章標題] AS [文章標題], 
+    [articleandmessage].[文章內容] AS [文章內容], 
+    [articleandmessage].[留言人] AS [留言人], 
+    [articleandmessage].[留言內容] AS [留言內容]
+    FROM [dbo].[articleandmessage] AS [articleandmessage]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="QA" EntityType="Self.QA" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [QA].[發問者] AS [發問者], 
+    [QA].[標題] AS [標題], 
+    [QA].[內容] AS [內容], 
+    [QA].[發問時間] AS [發問時間], 
+    [QA].[回答者] AS [回答者], 
+    [QA].[專家回答] AS [專家回答], 
+    [QA].[回覆時間] AS [回覆時間]
+    FROM [dbo].[QA] AS [QA]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="chatLog" Association="Self.chatLog">
+            <End Role="Chatroom" EntitySet="Chatroom" />
+            <End Role="ChatroomLog" EntitySet="ChatroomLog" />
+          </AssociationSet>
+          <AssociationSet Name="CheckinReward Record" Association="Self.CheckinReward Record">
+            <End Role="CheckinRewards" EntitySet="CheckinRewards" />
+            <End Role="Checkin" EntitySet="Checkin" />
+          </AssociationSet>
+          <AssociationSet Name="CollectArticle" Association="Self.CollectArticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Collect" EntitySet="Collect" />
+          </AssociationSet>
+          <AssociationSet Name="Expert answer questions" Association="Self.Expert answer questions">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ExpertAnswer" EntitySet="ExpertAnswer" />
+          </AssociationSet>
+          <AssociationSet Name="Expert received Question" Association="Self.Expert received Question">
+            <End Role="UserQuestion" EntitySet="UserQuestion" />
+            <End Role="ExpertAnswer" EntitySet="ExpertAnswer" />
+          </AssociationSet>
+          <AssociationSet Name="MessageArticle" Association="Self.MessageArticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="Relationship1" Association="Self.Relationship1">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ThanksfulThings" EntitySet="ThanksfulThings" />
+          </AssociationSet>
+          <AssociationSet Name="reportsarticle" Association="Self.reportsarticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="User applies to be an expert" Association="Self.User applies to be an expert">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ExpertApply" EntitySet="ExpertApply" />
+          </AssociationSet>
+          <AssociationSet Name="User asks a question" Association="Self.User asks a question">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="UserQuestion" EntitySet="UserQuestion" />
+          </AssociationSet>
+          <AssociationSet Name="User Message" Association="Self.User Message">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="User reports" Association="Self.User reports">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="User Send Message" Association="Self.User Send Message">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ChatroomLog" EntitySet="ChatroomLog" />
+          </AssociationSet>
+          <AssociationSet Name="UserCheckin" Association="Self.UserCheckin">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Checkin" EntitySet="Checkin" />
+          </AssociationSet>
+          <AssociationSet Name="UserCollect" Association="Self.UserCollect">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Collect" EntitySet="Collect" />
+          </AssociationSet>
+          <AssociationSet Name="UserCreateArticle" Association="Self.UserCreateArticle">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Article" EntitySet="Article" />
+          </AssociationSet>
+          <AssociationSet Name="UserMood" Association="Self.UserMood">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Mood" EntitySet="Mood" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="healingForestModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Article">
+          <Key>
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="ArticleID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="56" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageURL" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Classification" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Likes" Type="Int32" />
+          <Property Name="ArticleType" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="Time" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Collect" Relationship="Self.CollectArticle" FromRole="Article" ToRole="Collect" />
+          <NavigationProperty Name="Message" Relationship="Self.MessageArticle" FromRole="Article" ToRole="Message" />
+          <NavigationProperty Name="Report" Relationship="Self.reportsarticle" FromRole="Article" ToRole="Report" />
+          <NavigationProperty Name="UserManage" Relationship="Self.UserCreateArticle" FromRole="Article" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Chatroom">
+          <Key>
+            <PropertyRef Name="ChatroomID" />
+          </Key>
+          <Property Name="ChatroomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ChatRoomName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="member" Type="String" MaxLength="56" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ChatroomLog" Relationship="Self.chatLog" FromRole="Chatroom" ToRole="ChatroomLog" />
+        </EntityType>
+        <EntityType Name="ChatroomLog">
+          <Key>
+            <PropertyRef Name="ChatroomLogID" />
+          </Key>
+          <Property Name="ChatroomLogID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ChatroomID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Chatroom" Relationship="Self.chatLog" FromRole="ChatroomLog" ToRole="Chatroom" />
+          <NavigationProperty Name="UserManage" Relationship="Self.User_Send_Message" FromRole="ChatroomLog" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Checkin">
+          <Key>
+            <PropertyRef Name="CheckinID" />
+          </Key>
+          <Property Name="CheckinID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CheckinRewardsID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CheckinRewards" Relationship="Self.CheckinReward_Record" FromRole="Checkin" ToRole="CheckinRewards" />
+          <NavigationProperty Name="UserManage" Relationship="Self.UserCheckin" FromRole="Checkin" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="CheckinRewards">
+          <Key>
+            <PropertyRef Name="CheckinRewardsID" />
+          </Key>
+          <Property Name="CheckinRewardsID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CheckinDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ExperienceValue" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Checkin" Relationship="Self.CheckinReward_Record" FromRole="CheckinRewards" ToRole="Checkin" />
+        </EntityType>
+        <EntityType Name="Collect">
+          <Key>
+            <PropertyRef Name="UserID" />
+            <PropertyRef Name="ArticleID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ArticleID" Type="Int32" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Article" Relationship="Self.CollectArticle" FromRole="Collect" ToRole="Article" />
+          <NavigationProperty Name="UserManage" Relationship="Self.UserCollect" FromRole="Collect" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="ExpertAnswer">
+          <Key>
+            <PropertyRef Name="AnswerID" />
+          </Key>
+          <Property Name="AnswerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="QuestionID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="AnswerContent" Type="String" MaxLength="2048" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="AnswerTime" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="UserManage" Relationship="Self.Expert_answer_questions" FromRole="ExpertAnswer" ToRole="UserManage" />
+          <NavigationProperty Name="UserQuestion" Relationship="Self.Expert_received_Question" FromRole="ExpertAnswer" ToRole="UserQuestion" />
+        </EntityType>
+        <EntityType Name="ExpertApply">
+          <Key>
+            <PropertyRef Name="ExpertApplyID" />
+          </Key>
+          <Property Name="ExpertApplyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ExpertField" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ExpertInfo" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="8" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ExpertImgURL" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Remark" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="UserManage" Relationship="Self.User_applies_to_be_an_expert" FromRole="ExpertApply" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Message">
+          <Key>
+            <PropertyRef Name="MessageID" />
+          </Key>
+          <Property Name="MessageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ArticleID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Article" Relationship="Self.MessageArticle" FromRole="Message" ToRole="Article" />
+          <NavigationProperty Name="UserManage" Relationship="Self.User_Message" FromRole="Message" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Mood">
+          <Key>
+            <PropertyRef Name="MoodID" />
+          </Key>
+          <Property Name="MoodID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Mood1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserManage" Relationship="Self.UserMood" FromRole="Mood" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Report_ID" />
+          </Key>
+          <Property Name="Report_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="ArticleID" Type="Int32" Nullable="false" />
+          <Property Name="ReportContent" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Article" Relationship="Self.reportsarticle" FromRole="Report" ToRole="Article" />
+          <NavigationProperty Name="UserManage" Relationship="Self.User_reports" FromRole="Report" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="ThanksfulThings">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Content" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ImageURL" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="UserManage" Relationship="Self.Relationship1" FromRole="ThanksfulThings" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="UserManage">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Account" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="32" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserType" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="LevelValue" Type="Int32" Nullable="false" />
+          <Property Name="Experience" Type="Double" Nullable="false" />
+          <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Article" Relationship="Self.UserCreateArticle" FromRole="UserManage" ToRole="Article" />
+          <NavigationProperty Name="ChatroomLog" Relationship="Self.User_Send_Message" FromRole="UserManage" ToRole="ChatroomLog" />
+          <NavigationProperty Name="Checkin" Relationship="Self.UserCheckin" FromRole="UserManage" ToRole="Checkin" />
+          <NavigationProperty Name="Collect" Relationship="Self.UserCollect" FromRole="UserManage" ToRole="Collect" />
+          <NavigationProperty Name="ExpertAnswer" Relationship="Self.Expert_answer_questions" FromRole="UserManage" ToRole="ExpertAnswer" />
+          <NavigationProperty Name="ExpertApply" Relationship="Self.User_applies_to_be_an_expert" FromRole="UserManage" ToRole="ExpertApply" />
+          <NavigationProperty Name="Message" Relationship="Self.User_Message" FromRole="UserManage" ToRole="Message" />
+          <NavigationProperty Name="Mood" Relationship="Self.UserMood" FromRole="UserManage" ToRole="Mood" />
+          <NavigationProperty Name="Report" Relationship="Self.User_reports" FromRole="UserManage" ToRole="Report" />
+          <NavigationProperty Name="ThanksfulThings" Relationship="Self.Relationship1" FromRole="UserManage" ToRole="ThanksfulThings" />
+          <NavigationProperty Name="UserQuestion" Relationship="Self.User_asks_a_question" FromRole="UserManage" ToRole="UserQuestion" />
+        </EntityType>
+        <EntityType Name="UserQuestion">
+          <Key>
+            <PropertyRef Name="UserQuestionID" />
+          </Key>
+          <Property Name="UserQuestionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="QuestionTitle" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="QuestionContent" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="QuestionTime" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="ExpertAnswer" Relationship="Self.Expert_received_Question" FromRole="UserQuestion" ToRole="ExpertAnswer" />
+          <NavigationProperty Name="UserManage" Relationship="Self.User_asks_a_question" FromRole="UserQuestion" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="articleandmessage">
+          <Key>
+            <PropertyRef Name="發布者" />
+            <PropertyRef Name="文章標題" />
+            <PropertyRef Name="文章內容" />
+            <PropertyRef Name="留言人" />
+            <PropertyRef Name="留言內容" />
+          </Key>
+          <Property Name="發布者" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="文章標題" Type="String" MaxLength="56" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="文章內容" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="留言人" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="留言內容" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="QA">
+          <Key>
+            <PropertyRef Name="發問者" />
+            <PropertyRef Name="標題" />
+            <PropertyRef Name="內容" />
+            <PropertyRef Name="發問時間" />
+            <PropertyRef Name="回答者" />
+            <PropertyRef Name="專家回答" />
+            <PropertyRef Name="回覆時間" />
+          </Key>
+          <Property Name="發問者" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="標題" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="內容" Type="String" MaxLength="1024" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="發問時間" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="回答者" Type="String" MaxLength="16" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="專家回答" Type="String" MaxLength="2048" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="回覆時間" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <Association Name="CollectArticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Collect" Type="Self.Collect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Collect">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MessageArticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="reportsarticle">
+          <End Role="Article" Type="Self.Article" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Article">
+              <PropertyRef Name="ArticleID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCreateArticle">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1" />
+          <End Role="Article" Type="Self.Article" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Article">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="chatLog">
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="ChatroomLog" Type="Self.ChatroomLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Chatroom">
+              <PropertyRef Name="ChatroomID" />
+            </Principal>
+            <Dependent Role="ChatroomLog">
+              <PropertyRef Name="ChatroomID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_Send_Message">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ChatroomLog" Type="Self.ChatroomLog" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ChatroomLog">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CheckinReward_Record">
+          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="1" />
+          <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CheckinRewards">
+              <PropertyRef Name="CheckinRewardsID" />
+            </Principal>
+            <Dependent Role="Checkin">
+              <PropertyRef Name="CheckinRewardsID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCheckin">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Checkin">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserCollect">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Collect" Type="Self.Collect" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Collect">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Expert_answer_questions">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ExpertAnswer" Type="Self.ExpertAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExpertAnswer">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Expert_received_Question">
+          <End Role="UserQuestion" Type="Self.UserQuestion" Multiplicity="1" />
+          <End Role="ExpertAnswer" Type="Self.ExpertAnswer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserQuestion">
+              <PropertyRef Name="UserQuestionID" />
+            </Principal>
+            <Dependent Role="ExpertAnswer">
+              <PropertyRef Name="QuestionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_applies_to_be_an_expert">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ExpertApply" Type="Self.ExpertApply" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ExpertApply">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_Message">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Message" Type="Self.Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Message">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserMood">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Mood" Type="Self.Mood" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Mood">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_reports">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="Report" Type="Self.Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Report">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Relationship1">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ThanksfulThings" Type="Self.ThanksfulThings" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ThanksfulThings">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="User_asks_a_question">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="UserQuestion" Type="Self.UserQuestion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="UserQuestion">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="healingForestEntities2" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Article" EntityType="Self.Article" />
+          <EntitySet Name="Chatroom" EntityType="Self.Chatroom" />
+          <EntitySet Name="ChatroomLog" EntityType="Self.ChatroomLog" />
+          <EntitySet Name="Checkin" EntityType="Self.Checkin" />
+          <EntitySet Name="CheckinRewards" EntityType="Self.CheckinRewards" />
+          <EntitySet Name="Collect" EntityType="Self.Collect" />
+          <EntitySet Name="ExpertAnswer" EntityType="Self.ExpertAnswer" />
+          <EntitySet Name="ExpertApply" EntityType="Self.ExpertApply" />
+          <EntitySet Name="Message" EntityType="Self.Message" />
+          <EntitySet Name="Mood" EntityType="Self.Mood" />
+          <EntitySet Name="Report" EntityType="Self.Report" />
+          <EntitySet Name="ThanksfulThings" EntityType="Self.ThanksfulThings" />
+          <EntitySet Name="UserManage" EntityType="Self.UserManage" />
+          <EntitySet Name="UserQuestion" EntityType="Self.UserQuestion" />
+          <EntitySet Name="articleandmessage" EntityType="Self.articleandmessage" />
+          <EntitySet Name="QA" EntityType="Self.QA" />
+          <AssociationSet Name="CollectArticle" Association="Self.CollectArticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Collect" EntitySet="Collect" />
+          </AssociationSet>
+          <AssociationSet Name="MessageArticle" Association="Self.MessageArticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="reportsarticle" Association="Self.reportsarticle">
+            <End Role="Article" EntitySet="Article" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="UserCreateArticle" Association="Self.UserCreateArticle">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Article" EntitySet="Article" />
+          </AssociationSet>
+          <AssociationSet Name="chatLog" Association="Self.chatLog">
+            <End Role="Chatroom" EntitySet="Chatroom" />
+            <End Role="ChatroomLog" EntitySet="ChatroomLog" />
+          </AssociationSet>
+          <AssociationSet Name="User_Send_Message" Association="Self.User_Send_Message">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ChatroomLog" EntitySet="ChatroomLog" />
+          </AssociationSet>
+          <AssociationSet Name="CheckinReward_Record" Association="Self.CheckinReward_Record">
+            <End Role="CheckinRewards" EntitySet="CheckinRewards" />
+            <End Role="Checkin" EntitySet="Checkin" />
+          </AssociationSet>
+          <AssociationSet Name="UserCheckin" Association="Self.UserCheckin">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Checkin" EntitySet="Checkin" />
+          </AssociationSet>
+          <AssociationSet Name="UserCollect" Association="Self.UserCollect">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Collect" EntitySet="Collect" />
+          </AssociationSet>
+          <AssociationSet Name="Expert_answer_questions" Association="Self.Expert_answer_questions">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ExpertAnswer" EntitySet="ExpertAnswer" />
+          </AssociationSet>
+          <AssociationSet Name="Expert_received_Question" Association="Self.Expert_received_Question">
+            <End Role="UserQuestion" EntitySet="UserQuestion" />
+            <End Role="ExpertAnswer" EntitySet="ExpertAnswer" />
+          </AssociationSet>
+          <AssociationSet Name="User_applies_to_be_an_expert" Association="Self.User_applies_to_be_an_expert">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ExpertApply" EntitySet="ExpertApply" />
+          </AssociationSet>
+          <AssociationSet Name="User_Message" Association="Self.User_Message">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="UserMood" Association="Self.UserMood">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Mood" EntitySet="Mood" />
+          </AssociationSet>
+          <AssociationSet Name="User_reports" Association="Self.User_reports">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="Relationship1" Association="Self.Relationship1">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ThanksfulThings" EntitySet="ThanksfulThings" />
+          </AssociationSet>
+          <AssociationSet Name="User_asks_a_question" Association="Self.User_asks_a_question">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="UserQuestion" EntitySet="UserQuestion" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="healingForestModelStoreContainer" CdmEntityContainer="healingForestEntities2">
+          <EntitySetMapping Name="Article">
+            <EntityTypeMapping TypeName="healingForestModel.Article">
+              <MappingFragment StoreEntitySet="Article">
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="Classification" ColumnName="Classification" />
+                <ScalarProperty Name="Likes" ColumnName="Likes" />
+                <ScalarProperty Name="ArticleType" ColumnName="ArticleType" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Chatroom">
+            <EntityTypeMapping TypeName="healingForestModel.Chatroom">
+              <MappingFragment StoreEntitySet="Chatroom">
+                <ScalarProperty Name="ChatroomID" ColumnName="ChatroomID" />
+                <ScalarProperty Name="ChatRoomName" ColumnName="ChatRoomName" />
+                <ScalarProperty Name="member" ColumnName="member" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ChatroomLog">
+            <EntityTypeMapping TypeName="healingForestModel.ChatroomLog">
+              <MappingFragment StoreEntitySet="ChatroomLog">
+                <ScalarProperty Name="ChatroomLogID" ColumnName="ChatroomLogID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ChatroomID" ColumnName="ChatroomID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Checkin">
+            <EntityTypeMapping TypeName="healingForestModel.Checkin">
+              <MappingFragment StoreEntitySet="Checkin">
+                <ScalarProperty Name="CheckinID" ColumnName="CheckinID" />
+                <ScalarProperty Name="CheckinRewardsID" ColumnName="CheckinRewardsID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CheckinRewards">
+            <EntityTypeMapping TypeName="healingForestModel.CheckinRewards">
+              <MappingFragment StoreEntitySet="CheckinRewards">
+                <ScalarProperty Name="CheckinRewardsID" ColumnName="CheckinRewardsID" />
+                <ScalarProperty Name="CheckinDate" ColumnName="CheckinDate" />
+                <ScalarProperty Name="ExperienceValue" ColumnName="ExperienceValue" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Collect">
+            <EntityTypeMapping TypeName="healingForestModel.Collect">
+              <MappingFragment StoreEntitySet="Collect">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpertAnswer">
+            <EntityTypeMapping TypeName="healingForestModel.ExpertAnswer">
+              <MappingFragment StoreEntitySet="ExpertAnswer">
+                <ScalarProperty Name="AnswerID" ColumnName="AnswerID" />
+                <ScalarProperty Name="QuestionID" ColumnName="QuestionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+                <ScalarProperty Name="AnswerTime" ColumnName="AnswerTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ExpertApply">
+            <EntityTypeMapping TypeName="healingForestModel.ExpertApply">
+              <MappingFragment StoreEntitySet="ExpertApply">
+                <ScalarProperty Name="ExpertApplyID" ColumnName="ExpertApplyID" />
+                <ScalarProperty Name="ExpertField" ColumnName="ExpertField" />
+                <ScalarProperty Name="ExpertInfo" ColumnName="ExpertInfo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ExpertImgURL" ColumnName="ExpertImgURL" />
+                <ScalarProperty Name="Remark" ColumnName="Remark" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Message">
+            <EntityTypeMapping TypeName="healingForestModel.Message">
+              <MappingFragment StoreEntitySet="Message">
+                <ScalarProperty Name="MessageID" ColumnName="MessageID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mood">
+            <EntityTypeMapping TypeName="healingForestModel.Mood">
+              <MappingFragment StoreEntitySet="Mood">
+                <ScalarProperty Name="MoodID" ColumnName="MoodID" />
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Mood1" ColumnName="Mood" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Report">
+            <EntityTypeMapping TypeName="healingForestModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Report_ID" ColumnName="Report ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
+                <ScalarProperty Name="ReportContent" ColumnName="ReportContent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ThanksfulThings">
+            <EntityTypeMapping TypeName="healingForestModel.ThanksfulThings">
+              <MappingFragment StoreEntitySet="ThanksfulThings">
+                <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="ImageURL" ColumnName="ImageURL" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserManage">
+            <EntityTypeMapping TypeName="healingForestModel.UserManage">
+              <MappingFragment StoreEntitySet="UserManage">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="LevelValue" ColumnName="LevelValue" />
+                <ScalarProperty Name="Experience" ColumnName="Experience" />
+                <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserQuestion">
+            <EntityTypeMapping TypeName="healingForestModel.UserQuestion">
+              <MappingFragment StoreEntitySet="UserQuestion">
+                <ScalarProperty Name="UserQuestionID" ColumnName="UserQuestionID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="QuestionTitle" ColumnName="QuestionTitle" />
+                <ScalarProperty Name="QuestionContent" ColumnName="QuestionContent" />
+                <ScalarProperty Name="QuestionTime" ColumnName="QuestionTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="articleandmessage">
+            <EntityTypeMapping TypeName="healingForestModel.articleandmessage">
+              <MappingFragment StoreEntitySet="articleandmessage">
+                <ScalarProperty Name="發布者" ColumnName="發布者" />
+                <ScalarProperty Name="文章標題" ColumnName="文章標題" />
+                <ScalarProperty Name="文章內容" ColumnName="文章內容" />
+                <ScalarProperty Name="留言人" ColumnName="留言人" />
+                <ScalarProperty Name="留言內容" ColumnName="留言內容" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QA">
+            <EntityTypeMapping TypeName="healingForestModel.QA">
+              <MappingFragment StoreEntitySet="QA">
+                <ScalarProperty Name="發問者" ColumnName="發問者" />
+                <ScalarProperty Name="標題" ColumnName="標題" />
+                <ScalarProperty Name="內容" ColumnName="內容" />
+                <ScalarProperty Name="發問時間" ColumnName="發問時間" />
+                <ScalarProperty Name="回答者" ColumnName="回答者" />
+                <ScalarProperty Name="專家回答" ColumnName="專家回答" />
+                <ScalarProperty Name="回覆時間" ColumnName="回覆時間" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

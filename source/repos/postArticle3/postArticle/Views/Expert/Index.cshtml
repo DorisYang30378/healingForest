@@ -1,0 +1,46 @@
+﻿@model List<postArticle.Models.ExpertApply>
+
+@{
+	ViewBag.Title = "Index";
+}
+@foreach (var item in Model)
+{
+	<div>
+		<h4>ExpertApply</h4>
+		<hr />
+		<dl class="dl-horizontal">
+			<dt>
+				@Html.DisplayNameFor(model => item.ExpertField)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => item.ExpertField)
+			</dd>
+
+			<dt>
+				@Html.DisplayNameFor(model => item.ExpertInfo)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => item.ExpertInfo)
+			</dd>
+
+			<dt>
+				@Html.DisplayNameFor(model => item.Status)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => item.Status)
+			</dd>
+
+			<dt>
+				@Html.DisplayNameFor(model => item.ExpertImgURL)
+			</dt>
+			<dd>
+				@Html.DisplayFor(model => item.ExpertImgURL)
+			</dd>
+		</dl>
+	</div>
+	<p>
+		@Html.ActionLink("Edit", "Edit", new { id = item.ExpertApplyID }) |
+		@Html.ActionLink("Back to List", "Index")
+	</p>
+}
+

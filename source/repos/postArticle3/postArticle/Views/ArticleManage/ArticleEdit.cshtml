@@ -1,0 +1,210 @@
+﻿@model postArticle.viewmodel.ArticleManageViewModel
+
+@{
+	ViewBag.Title = "編輯文章";
+}
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
+<script src="~/Scripts/CKEditor/build/ckeditor.js"></script>
+
+
+
+<style>
+	h4{
+		padding-top:35px;
+	}
+	body {
+		background-color: #A4DA8A;
+		font-family: Arial, sans-serif;
+	}
+
+	.form-container {
+		max-width: 1500px;
+		margin: 0 auto;
+		background-color: #f5f5f5;
+		padding: 20px;
+		border-radius: 5px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	}
+	#submitbutton {
+		background-color: #97CD7D;
+		color:white;
+		margin-right:10px;
+		
+	}
+	#resetbutton {
+		background-color: #cd4124;
+		color: white;
+		margin-left: 10px;
+	}
+
+	.form-group {
+		margin-bottom: 20px;
+	}
+
+	.form-label {
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+
+	.form-control {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #ccc;
+		border-radius: 5px;
+	}
+	.buttonicon{
+		display:flex;
+		justify-content:center;
+	}
+
+	.btn-primary {
+		display: inline-block;
+		padding: 10px 20px;
+		background-color: #007bff;
+		color: #fff;
+		border: none;
+		border-radius: 5px;
+		cursor: pointer;
+		transition: background-color 0.3s ease;
+	}
+
+		.btn-primary:hover {
+			background-color: #0056b3;
+		}
+	#imagePreview {
+		
+		margin:auto;
+
+	}
+</style>
+
+
+@using (Html.BeginForm("ArticleEdit", null, FormMethod.Post, new { enctype = "multipart/form-data", @class = "form-container" }))
+{
+	@Html.AntiForgeryToken()
+
+	<h4>編輯文章</h4>
+	<hr />
+	@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+	@Html.HiddenFor(model => model.article.ArticleID)
+	@Html.HiddenFor(model => model.article.UserID)
+	@Html.HiddenFor(model => model.article.ArticleType)
+	@Html.HiddenFor(model => model.article.Time)
+	@Html.HiddenFor(model => model.article.Likes)
+	@Html.HiddenFor(model => model.article.ImageURL)
+
+	<div class="form-group">
+		<label class="form-label" for="Title">標題</label>
+		@Html.EditorFor(model => model.article.Title, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(model => model.article.Title, "", new { @class = "text-danger" })
+	</div>
+
+	<div class="form-group">
+		<label class="form-label" for="Classification">分類</label>
+		@Html.DropDownListFor(model => model.article.Classification, new SelectList(Model.Classification), null, htmlAttributes: new { @class = "form-control" })
+		@Html.ValidationMessageFor(model => model.article.Classification, "", new { @class = "text-danger" })
+	</div>
+	<div class="form-group">
+		<label class="form-label" for="Content" name="editorDemo">內容</label>
+		@Html.TextAreaFor(model => model.article.Content, 18, 50, new { htmlAttributes = new {  rows = 4 } })
+		@Html.ValidationMessageFor(model => model.article.Content, "", new { @class = "text-danger" })
+	</div>
+
+	<div class="form-group ">
+		<label class="form-label" for="file">圖片</label>
+		<input type="file" name="file" id="file" accept="image/*" onchange="previewImage(event)" />
+		<br>			
+		<img id="imagePreview" src="~/Uploads/@Model.article.ImageURL" alt="Image Preview" style=" max-width:400px; min-width:400px; max-height: 100%; display:flex; align-content:center " />
+			
+	
+	
+		
+	</div>
+
+
+
+	<div class="form-group buttonicon">
+		<div><input type="submit" value="確定修改" class="btn " id="submitbutton" /></div>
+		<div>
+			<input type="reset" value="重設圖片" class="btn " onclick="ResetImg()" id="resetbutton" />
+		</div>
+	</div>
+		
+		
+}
+
+<div>
+	<button class="btn" type="button" style=" margin-top:15px; background-color: #6eb465; color:white "  onclick="location.href='@Url.Action("ArticleIndex", "Home", new { id = Model.article.ArticleID }, null)'">返回首頁</button>
+</div>
+
+<script>
+	ClassicEditor
+		.create(document.querySelector('#article_Content'), {
+			toolbar: {
+				items: [
+					'heading',
+					'|',
+					'fontFamily',
+					'fontColor',
+					'fontSize',
+					'|',
+					'bold',
+					'italic',
+					'removeFormat',
+					'|',
+					'specialCharacters',
+					'link',
+					'bulletedList',
+					'numberedList',
+					'|',
+					'outdent',
+					'indent',
+					'alignment',
+					'|',
+					'blockQuote',
+					'insertTable',
+					'|',
+					'undo',
+					'redo'
+				]
+			},
+			licenseKey: '',
+		})
+		.then(editor => {
+			editor.ui.view.toolbar.element.addEventListener('ready', () => {
+				// 在工具欄準備就緒後執行自訂程式碼
+				console.log('Editor toolbar is ready');
+				// 在此處添加您的自訂程式碼
+			});
+		})
+		.catch(error => {
+			console.error('Oops, something went wrong!');
+			console.error(error);
+		});
+
+
+    function previewImage(event) {
+        var fileInput = event.target;
+        var file = fileInput.files[0];
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            var imagePreview = document.getElementById('imagePreview');
+            if (imagePreview) {
+                imagePreview.src = e.target.result;
+            }
+        };
+
+        reader.readAsDataURL(file);
+    }
+
+
+
+   function ResetImg() {
+       // 恢復圖片的原始 src
+       document.getElementById('imagePreview').src = '@Url.Content("~/Uploads/" + Model.article.ImageURL)';
+   }
+
+</script>

@@ -1,0 +1,100 @@
+﻿@model postArticle.Models.ExpertApply
+@{
+	ViewBag.Title = "專家申請";
+}
+
+<style>
+	body {
+		background-color: #DBF0D0;
+	}
+
+	.window_content {
+		position: relative;
+		width: 400px;
+		height: fit-content;
+		margin: 0 auto;
+		padding-bottom: 20px;
+		top: 20px;
+		border-radius: 5px;
+		background-color: #ffffff;
+	}
+
+
+	@@media screen and (max-width:769px) {
+		.window_content {
+			position: relative;
+			width: 100%;
+			height: fit-content;
+			margin: 0 auto;
+			top: 20px;
+			border-radius: 5px;
+			background-color: #ffffff;
+		}
+	}
+</style>
+
+<br>
+
+
+
+
+
+
+<div class="container">
+	<div class="window_content">
+		<div class="window_content_body">
+			@using (Html.BeginForm("Apply", "Expert", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
+				@Html.AntiForgeryToken()
+
+				<div class="form-group ">
+
+					<div style=" padding-bottom:10px; padding-top:20px; text-align:center; font-size:30px; ">專家申請</div>
+
+					<div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						@Html.EditorFor(model => model.ExpertField, new { htmlAttributes = new { @placeholder = "專業領域", @class = "form-control", @style = "background-color:#F2ECE2;", @autofocus = "autofocus" } })
+						@Html.ValidationMessageFor(model => model.ExpertField, "", new { @class = "text-danger" })
+					</div>
+
+
+					<div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						<input class="form-control" type="file" name="file" id="formFile" style="background-color: #F2ECE2" placeholder="證照/畢業證書">
+
+					</div>
+
+					<div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						@Html.TextAreaFor(model => model.ExpertInfo, new { @placeholder = "個人簡介(字數限制200)", @class = "form-control", @style = "background-color:#F2ECE2; resize:none; height:200px;", maxlength = "200" })
+						@Html.ValidationMessageFor(model => model.ExpertInfo, "", new { @class = "text-danger" })
+					</div>
+
+					<div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						@Html.TextAreaFor(model => model.Remark, new { @placeholder = "備註(字數限制100)", @class = "form-control", @style = "background-color:#F2ECE2; resize:none; height:100px;", maxlength = "100" })
+						@Html.ValidationMessageFor(model => model.Remark, "", new { @class = "text-danger" })
+					</div>
+
+					<div class="hidden" style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						@Html.HiddenFor(model => model.Status, new { @Value = "審核中" })
+
+						@Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+					</div>
+
+
+					<div style="position: relative; display: table; margin: 15px auto; width: 250px;">
+						<input type="submit" value="確認送出" class="btn btn-default  form-control" style="background-color:#97CD7D; color:aliceblue">
+					</div>
+
+
+				</div>
+
+			}
+
+		</div>
+	</div>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+	<script>
+        alert("@ViewBag.Message");
+	</script>
+}

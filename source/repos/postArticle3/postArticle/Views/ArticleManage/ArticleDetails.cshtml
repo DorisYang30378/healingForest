@@ -1,0 +1,314 @@
+﻿@model postArticle.viewmodel.ArticleDetailsViewModel
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+	var article = Model.article;
+	ViewBag.Title = Model.article.Title;
+	var messages = Model.messages;
+	int UserID = 0;
+
+	if (Session["UserID"] != null)
+	{
+		UserID = (int)Session["UserID"];
+	}
+}
+
+<style>
+	/* 弹出层的内容样式 */
+	.row {
+		margin-top: 60px;
+	}
+
+	.popup-overlay form {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	/* 覆盖整个网页 */
+	.popup-overlay {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.5); /* 半透明背景色，可以根据需要调整透明度 */
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		z-index: 9999; /* 确保弹出层在其他元素之上 */
+	}
+
+	body {
+		background-color: #DBF0D0;
+		font-family: Arial, sans-serif;
+	}
+
+	.article-container {
+		max-width: 2000px;
+		padding: 20px;
+		background-color: #fff;
+		border-radius: 5px;
+	}
+
+	.article-title {
+		font-size: 30px;
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+
+	.article-author {
+		font-size: 16px;
+		color: #888;
+		margin-bottom: 10px;
+	}
+
+	.article-content {
+		font-size: 18px;
+		margin-bottom: 0px;
+
+	}
+
+	.article-image {
+		display: flex;
+		justify-content: center;
+	}
+
+		.article-image img {
+			max-width: 70%;
+			height: auto;
+			margin-bottom: 20px;
+		}
+
+	.article-time {
+		margin-left: auto;
+		font-size: 14px;
+		color: #888;
+		margin-bottom: 10px;
+	}
+
+	.comments-container {
+		
+		padding-top: 20px;
+		background-color: #fff
+	}
+
+	.comment-item {
+		margin-top: 10px;
+		padding-top: 10px;
+		border-top: 1px solid #ccc;
+	}
+	#comment {
+		padding-top: 10px;
+		padding-bottom: 10px;
+		border-top: 1px solid #ccc;
+		border-bottom: 1px solid #ccc;
+	}
+	.comment-header {
+		margin-bottom: 10px;
+		font-weight: bold;
+	}
+
+	.comment-content {
+		font-size: 16px;
+		margin-bottom: 10px;
+	}
+
+	.comment-info {
+		font-size: 14px;
+		color: #888;
+	}
+
+	.add-comment-button {
+		text-align: right;
+		margin-top: 20px;
+	}
+
+		.add-comment-button button {
+			padding: 10px 20px;
+			background-color: #97CD7D;
+			border: none;
+			border-radius: 5px;
+			color: #fff;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+	
+
+	.add-comment-button button:hover,
+	.add-comment-button button:focus {
+		background-color: #2f863a;
+	}
+</style>
+
+
+<hr />
+
+<div>
+	<div class="row  article-container">
+		<h2 class=" col-sm-10  article-title">@Html.DisplayFor(model => article.Title)</h2>
+
+		@if (Model.isUser)
+		{
+			<div class="col-sm-2 justify-content-end">
+				@if (!Model.IsCollect)
+				{
+					<button class="btn bi-star-fill" style="float:right"  onclick="handleCollect('@Url.Action("ArticleCollect", new { id = article.ArticleID })', '@Model.Page', '收藏')">收藏</button>
+				}
+				else
+				{
+					<button class="btn bi-star-fill" onclick="handleCollect('@Url.Action("CancelCollect", new { id = article.ArticleID })', '@Model.Page', '取消收藏')">取消收藏</button>
+				}
+			</div>
+
+
+
+		}
+
+
+		<p class="article-author">Author: @Html.DisplayFor(model => article.UserManage.UserName)</p>
+		<div class="article-content">
+			@Html.Raw(Model.article.Content)
+
+			<div class="article-image  ">
+				<img src="~/Uploads/@Html.DisplayFor(model => article.ImageURL)" alt="Article Image">
+			</div>
+			<p class="article-time">@Html.DisplayFor(model => article.Time)</p>
+			@if (Model.isCreatedByUser)
+			{
+				<button class="btn bi-star-fill" onclick="ArticleManage('@Url.Action("ArticleEdit")','@Model.article.ArticleID','編輯')">
+					編輯文章
+				</button>
+				<button class="btn bi-star-fill" onclick="ArticleManage('@Url.Action("ArticleDelete")','@Model.article.ArticleID','刪除')">
+					刪除文章
+				</button>
+			}
+		</div>
+
+		<div class="col-xl comments-container">
+			<h4 id="comment">留言</h4>
+			@foreach (var item in messages)
+			{
+				<div class="comment-item">
+					<div class="comment-header">
+						@if (Model.isUser && UserID != item.UserID)
+						{
+							@Html.ActionLink(item.UserManage.UserName, "DemoChar", "CharRoom", new { id = item.UserID }, null)
+						}
+						else
+						{
+							@Html.DisplayFor(modelItem => item.UserManage.UserName)
+						}
+					</div>
+					<div class="comment-content">
+						@Html.DisplayFor(modelItem => item.Content)
+					</div>
+					<div class="comment-info">
+						@Html.DisplayFor(modelItem => item.Time)
+					</div>
+				</div>
+			}
+
+		</div>
+
+		@if (Model.isUser)
+		{
+			<div class="add-comment-button">
+				<button onclick="openPopup()">新增留言</button>
+			</div>
+		}
+	</div>
+
+</div>
+
+
+
+<!-- 顯示留言的部分檢視區塊 -->
+@*@Html.Partial("MessageSection", Model)*@
+
+
+
+
+
+
+<div>
+	
+
+</div>
+
+@Html.PagedListPager(Model.messages, page => Url.Action("ArticleDetails", new { id = Model.article.ArticleID, page }))
+
+
+
+<div id="messagePopup" style="display:@Model.Display" class="popup-overlay">
+	@using (Html.BeginForm("", "", FormMethod.Post, new { id = "SendMessage" }))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+		@Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2", style = "color:#fff" })
+		@Html.EditorFor(model => model.Content, new { htmlAttributes = new { @class = "form-control" } })
+		@Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+		@Html.HiddenFor(model => model.Display)
+
+		<button class="btn btn-success" type="submit">確定</button>
+		<button class="btn btn-danger" type="button" onclick="closePopup()">取消</button>
+	}
+</div>
+
+<div>
+	<button class="btn " style="background-color: #6eb465; color:white" type="button" onclick="location.href='@Url.Action("ArticleIndex", "Home")'">返回首頁</button>
+</div>
+
+
+<script>
+			function handleCollect(url, page, action) {
+				var result = confirm("是否" + action + "此文章？");
+				if (result) {
+					var redirectUrl = url + '?page=' + encodeURIComponent(page);
+					makeAjaxRequest(redirectUrl, null);
+				}
+			}
+
+    function openPopup() {
+        document.getElementById("messagePopup").style.display = "block";
+    }
+
+    function closePopup() {
+        document.getElementById("messagePopup").style.display = "none";
+    }
+
+    $(document).ready(function() {
+            $('#SendMessage').submit(function(event) {
+                event.preventDefault(); // 阻止表單的默認提交行為
+                var redirectUrl = '@Url.Action("CreateMessage", "MessageManage")' +'?id='+ encodeURIComponent('@Model.article.ArticleID')+ '&page=' + encodeURIComponent('@Model.Page');
+                var formData = $(this).serialize();
+               // 使用 AJAX 發送 POST 請求
+                makeAjaxRequest(redirectUrl, formData);
+            });
+     });
+
+    function ArticleManage(url, id, action) {
+        var redirectUrl = url + '?id=' + encodeURIComponent(id);
+        if (action == "刪除") {
+            var result = confirm("是否" + action + "此文章？");
+
+            if (result) {
+                makeAjaxRequest(redirectUrl, null);
+            }
+        }
+        else {
+            window.location.href = redirectUrl;
+        }
+    }
+</script>
+
+
+
+
+
+
+

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<postArticle.Models.UserManage>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="container">
+    <h2>當前沒有聊天室，點擊使用者進行創建</h2>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.UserName)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a href="@Url.Action("DemoChar","CharRoom", new { id = item.UserID })" class="btn btn-primary">
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

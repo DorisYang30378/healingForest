@@ -1,0 +1,611 @@
+﻿@model postArticle.viewmodel.ArticleIndexViewModel
+@using PagedList.Mvc;
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+	ViewBag.Title = "首頁";
+	var articleList = Model.articles.ToList();
+	var ClassificationInput = "Classification";
+	var OrderInput = "Order";
+	var SearchInput = "Search";
+	var CollectInput = "Collect";
+	var MyArticleInput = "MyArticle";
+
+}
+
+
+<style>
+	body {
+		background-color: #DBF0D0;
+		font-family: Arial, sans-serif;
+	}
+
+	h2 {
+		text-align: center;
+		color: #333;
+	}
+
+	#button-container {
+		margin-bottom: 20px;
+	}
+
+		#button-container button {
+			margin-right: 10px;
+			padding: 5px 10px;
+			background-color: #97CD7D;
+			border: none;
+			border-radius: 5px;
+			color: #fff;
+			cursor: pointer;
+			margin-bottom: 20px;
+		}
+
+			.button-container button:hover,
+			.button-container button:focus {
+				background-color: #2f863a;
+			}
+
+	#selectArticle h {
+		font-weight: bold;
+		margin-bottom: 10px;
+	}
+
+	#selectArticle button {
+		margin-right: 10px;
+		padding: 5px 10px;
+		background-color: #97CD7D;
+		border: none;
+		border-radius: 5px;
+		color: #fff;
+		cursor: pointer;
+		margin-bottom: 20px;
+	}
+
+		.select-container button:hover,
+		.select-container button:focus {
+			background-color: #2f863a;
+		}
+
+	#article-container {
+		font-size: 16px;
+	}
+
+	#article-item {
+		margin-bottom: 20px;
+		background-color: #fff;
+		padding: 20px;
+		border-radius: 5px;
+		transition: transform 0.2s;
+	}
+
+		.article-item:hover {
+			transform: scale(1.05);
+		}
+
+	.article-title {
+		font-size: 30px;
+		font-weight: bold;
+		color:cadetblue;
+		margin-bottom: 10px;
+		
+	}
+
+	#contain{
+		margin-top:-30px;
+	}
+	
+	.article-content {
+		font-size: 18px;
+		margin-bottom: 10px;
+	}
+
+	.article-info {
+		font-size: 14px;
+		color: #888;
+		margin-bottom: 10px;
+	}
+
+	#article-image {
+		width: 500px;
+		height: 300px;
+		overflow: hidden;
+	}
+
+		#article-image img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+
+	#article-actions {
+		font-size: 14px;
+	}
+
+	h{
+		color:#216f24;
+	}
+
+	#search-container {
+		display: flex;
+		align-items: center;
+		margin-bottom: 20px;
+	}
+
+	#search-input {
+		margin-right: 10px;
+		
+	}
+
+		#search-input input[type="text"] {
+			width: 400px;
+			padding: 5px;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+
+	#search-button button {
+		padding: 5px 10px;
+		background-color: #97CD7D;
+		border: none;
+		border-radius: 5px;
+		color: #fff;
+		cursor: pointer;
+	}
+
+		.search-button button:hover,
+		.search-button button:focus {
+			background-color: #2f863a;
+		}
+
+	#selectArticle {
+		margin-top: 30px;
+	}
+	#button-container {
+		margin-top:30px;
+	}
+	.row{
+		margin-top:0px;
+	}
+	
+</style>
+
+
+<p style="font-size: 20px; margin-top: 60px; color: #216f24; font-weight: bold; ">使用者:@Model.userName</p>
+
+
+@using (Html.BeginForm("ArticleIndex", "Home", FormMethod.Post, new { id = "SelectPanel" }))
+{
+
+	<div class="row" id="contain" >
+		<div class="col-xxl-5" id="selectArticle">
+			<h>分類</h>
+			<button type="button" onclick="changeClass('ALL','@ClassificationInput')">全部</button>
+			<button type="button" onclick="changeClass('工作','@ClassificationInput')">工作</button>
+			<button type="button" onclick="changeClass('健康','@ClassificationInput')">健康</button>
+			<button type="button" onclick="changeClass('學業','@ClassificationInput')">學業</button>
+			<button type="button" onclick="changeClass('家庭','@ClassificationInput')">家庭</button>
+			<button type="button" onclick="changeClass('經濟','@ClassificationInput')">經濟</button>
+			@Html.HiddenFor(model => model.Classification, new { id = "ClassificationInput", value = "" })
+			<br>
+			<h>排序</h>
+			<button type="button" onclick="changeClass('Default','@OrderInput')">默認</button>
+			<button type="button" onclick="changeClass('時間','@OrderInput')">時間</button>
+			<button type="button" onclick="changeClass('人氣','@OrderInput')">人氣</button>
+			@Html.HiddenFor(model => model.Order, new { id = "OrderInput", value = "" })
+		</div>
+		<div class="col-xxl-2" id="button-container">
+			@if (Model.isUser)
+			{
+
+				if (Model.IsShowCollect)
+				{
+					@Html.HiddenFor(model => model.ShowCollect, new { id = "CollectInput", value = "" })
+					<button onclick="changeClass('false','@CollectInput')" type="button" class="btnn">顯示全部</button>
+				}
+				else
+				{
+					@Html.HiddenFor(model => model.ShowCollect, new { id = "CollectInput", value = "" })
+					<button onclick="changeClass('true','@CollectInput')" type="button" class="btnn">我的收藏</button>
+				}
+
+				if (Model.IsShowMyArticle)
+				{
+					@Html.HiddenFor(model => model.ShowMyArticle, new { id = "MyArticleInput", value = "" })
+					<button onclick="changeClass('false','@MyArticleInput')" type="button" class="btnn">所有文章</button>
+				}
+				else
+				{
+					@Html.HiddenFor(model => model.ShowMyArticle, new { id = "MyArticleInput", value = "" })
+					<button onclick="changeClass('true','@MyArticleInput')" type="button" class="btnn">我的文章</button>
+				}
+			}
+			else
+			{
+
+			}
+
+
+		</div>
+
+		<div class="col-xxl-5 justify-content-end " id="search-container">
+			<div id="search-input">
+				@Html.TextBoxFor(model => model.ShowSearch, new { value = Model.ShowSearch, placeholder = "輸入關鍵字" })
+			</div>
+			<div id="search-button">
+				@Html.HiddenFor(model => model.IsShowSearch, new { id = "SearchInput", value = false })
+				<button  type="button" onclick="changeClass(true,'@SearchInput')">搜尋</button>
+			</div>
+		</div>
+
+	</div>
+
+}
+
+<hr>
+
+
+
+<div id="article-container">
+	@{int index = 0; }
+
+	@foreach (var item in Model.articles)
+	{
+
+		<div class="container" >
+			<div class="row justify-content-evenly" id="article-item">
+				<div class="col-xl-6">
+					<div class="article-title">
+						<a href="@Url.Action("ArticleDetails", "ArticleManage", new { id = item.ArticleID })"  style="color:black";>
+							@Html.DisplayFor(modelItem => item.Title)
+						</a>
+					</div>
+					<div class="article-content">
+
+						@Html.Raw(HttpUtility.HtmlDecode(item.Content))
+
+					</div>
+					<div class="article-info">
+
+
+						@Html.DisplayFor(modelItem => item.UserManage.UserName)
+
+
+						@Html.DisplayFor(modelItem => item.Time)
+
+
+					</div>
+					@if (Model.isUser)
+					{
+						<div id="article-actions">
+							@if (!Model.IsCollect[index])
+							{
+								<button class="btn bi-star-fill" onclick="handleCollect('@Url.Action("ArticleCollect", new { id = item.ArticleID })', '@Model.Page', '收藏')">收藏|</button>
+							}
+							else
+							{
+								<button class="btn bi-star-fill" onclick="handleCollect('@Url.Action("CancelCollect", new { id = item.ArticleID })', '@Model.Page', '取消收藏')">取消收藏|</button>
+							}
+
+						</div>
+					}
+				</div>
+				<div class="col-xl-6 " id="article-image">
+					<img src="~/Uploads/@Html.DisplayFor(modelItem => item.ImageURL)" alt="Article Image">
+					@Html.HiddenFor(modelItem => item.ImageURL)
+				</div>
+			</div>
+
+		</div>
+		index += 1; 
+
+	}
+
+
+</div>
+
+
+        Page @(Model.articles.PageCount < Model.articles.PageNumber ? 0 : Model.articles.PageNumber) of
+@Model.articles.PageCount
+
+@Html.PagedListPager(Model.articles, page => Url.Action("ArticleIndex", new { page }))
+
+<script>
+    function handleCollect(url, page, action) {
+        var result = confirm("是否" + action + "此文章？");
+        if (result) {
+            var redirectUrl = url + '?page=' + encodeURIComponent(page);
+            makeAjaxRequest(redirectUrl, null);
+        }
+    }
+
+    function changeClass(value, input) {
+        document.getElementById(input + "Input").value = value;
+        var url = '@Url.Action("ArticleIndex", "Home")';
+        var data = $('#SelectPanel').serialize();
+        makeAjaxRequest(url, data);
+    }
+</script>
+
+@*
+
+	<style>
+		body {
+			background-color: #DBF0D0;
+		}
+		/*header---------------------------------------------------------------------------------------*/
+		.header {
+			height: 75px;
+			background-color: #A4DA8A;
+			display: flex;
+			border-radius: 10px;
+		}
+
+		.header-name {
+			color: white;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			align-items: center;
+			font-family: fantasy;
+			font-size: 30px;
+			padding-left: 50px;
+		}
+
+		.row {
+			width: 100%;
+			columns: 2;
+		}
+
+		.header-list {
+			width: 70%;
+			height: 100%;
+			display: flex;
+			align-items: flex-end;
+			justify-content: space-evenly;
+			float: right;
+		}
+
+			.header-list a {
+				font-size: 20px;
+				padding-bottom: 10px;
+				color: white;
+				text-decoration: none;
+			}
+
+		.hint:hover {
+			color: #2b7008;
+		}
+		/*container---------------------------------------------------------------------------------*/
+
+		.container {
+			width: 1200px;
+			height: 700px;
+			background-color: rgb(248, 248, 248);
+			margin: 70px auto auto auto;
+			overflow-y: scroll;
+		}
+
+		.layout_name {
+			font-size: 30px;
+			font-weight: bolder;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			margin: 30px auto auto 50px;
+		}
+
+		.container-list {
+			width: 90%;
+			height: 300px;
+			margin: 30px auto auto auto;
+			border-radius: 10px;
+			column-count: 2;
+			background-color: rgb(207, 207, 207);
+		}
+
+		.context {
+			width: 100%;
+			height: 100%;
+		}
+
+		.context-title {
+			margin: 10px auto auto 20px;
+			font-size: 20px;
+			font-weight: bolder;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+		}
+
+		.context-text {
+			margin: 10px auto auto 20px;
+			height: 60%;
+		}
+
+		.context-footer {
+			column-count: 3;
+			margin: 10px auto auto 20px;
+		}
+
+		.poster {
+			color: rgb(165, 165, 165);
+			font-size: 15px;
+			font-weight: bolder;
+		}
+
+		.post-time {
+			color: rgb(165, 165, 165);
+			font-size: 15px;
+			font-weight: bolder;
+			margin-left: -30px;
+		}
+
+		.post-icon i {
+			padding-left: 20px;
+			font-size: 16px;
+			color: rgb(165, 165, 165);
+		}
+
+			.post-icon i:hover {
+				color: black;
+			}
+
+		.content {
+			width: 100%;
+			height: 100%;
+		}
+
+		.content-img {
+			margin-top: -10px;
+			margin-left: 90px;
+		}
+
+		.content-dot {
+			height: 25px;
+			margin-left: 20px;
+			margin-top: 1px;
+			font-size: 20px;
+			color: rgb(165, 165, 165);
+		}
+
+			.content-dot:hover {
+				color: black;
+			}
+
+		.content-dot-su {
+			width: 100px;
+			height: 100px;
+			margin-left: -80px;
+			display: block;
+			z-index: 1;
+			position: relative;
+		}
+
+			.content-dot-su .bi {
+				width: 100%;
+				font-size: 20px;
+				background-color: rgb(255, 255, 255);
+				color: rgb(165, 165, 165);
+				border: none;
+				margin: auto;
+			}
+
+				.content-dot-su .bi:hover {
+					color: black;
+				}
+
+
+		/*footer---------------------------------------------------------------------------------*/
+
+		footer {
+			height: 100%;
+			width: 100%;
+			text-align: center;
+			padding-top: 50px;
+		}
+	</style>
+
+
+	<div class="container">
+
+		<div class="layout_name" id="layout-name">健康版</div>
+
+		<div class="container-list">
+
+			<div class="context">
+				<div class="context-title"><a href="https://www.healthsp.org/article/depression_prevention_treatment" target="_blank">如何知道自己有憂鬱症？憂鬱症發作、前兆、症狀、治療，醫師來解答</a></div>
+				<div class="context-text">憂鬱症是一種精神官能症，對人事物失去興趣甚至感到悲傷，且持續一段時間，初期不容易被發現。憂鬱症和單純情緒不好是不一樣的，多數人不會再難過低潮的情緒持續太久，但憂鬱症會維持相當長的一段時間，對於人的感受、行為和思考都會造成影響，嚴重的會造成身體機能問題，影響正常的起居生活、睡眠和工作(1)。台灣憂鬱症防治協會提到目前診斷憂鬱症的標準共有9個症狀，其中只要有5個症狀持續超過兩週，且大部分時間都有達到標準，就要小心得到憂鬱症...</div>
+				<div class="context-footer">
+					<div class="poster">發布者:</div>
+					<div class="post-time">2023-3-30 14:02</div>
+					<div class="post-icon">
+						<i class="bi bi-hand-thumbs-up-fill"></i>
+						<i class="bi bi-chat-text-fill"></i>
+						<i class="bi bi-share-fill"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="content">
+				<div class="content-dot">
+					<i class="bi bi-three-dots"></i>
+					<div class="content-dot-su">
+						<button class="bi bi-star-fill">收藏</button>
+						<button class="bi bi-exclamation-triangle-fill">檢舉</button>
+					</div>
+
+				</div>
+				<div class="content-img">
+					<img src="A.png" width="350px" height="260px" alt="">
+				</div>
+			</div>
+
+		</div>
+
+		<div class="container-list">
+
+			<div class="context">
+				<div class="context-title"><a href="https://www.healthsp.org/article/depression_prevention_treatment" target="_blank">如何知道自己有憂鬱症？憂鬱症發作、前兆、症狀、治療，醫師來解答</a></div>
+				<div class="context-text">憂鬱症是一種精神官能症，對人事物失去興趣甚至感到悲傷，且持續一段時間，初期不容易被發現。憂鬱症和單純情緒不好是不一樣的，多數人不會再難過低潮的情緒持續太久，但憂鬱症會維持相當長的一段時間，對於人的感受、行為和思考都會造成影響，嚴重的會造成身體機能問題，影響正常的起居生活、睡眠和工作(1)。台灣憂鬱症防治協會提到目前診斷憂鬱症的標準共有9個症狀，其中只要有5個症狀持續超過兩週，且大部分時間都有達到標準，就要小心得到憂鬱症...</div>
+				<div class="context-footer">
+					<div class="poster">發布者:</div>
+					<div class="post-time">2023-3-30 14:02</div>
+					<div class="post-icon">
+						<i class="bi bi-hand-thumbs-up-fill"></i>
+						<i class="bi bi-chat-text-fill"></i>
+						<i class="bi bi-share-fill"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="content">
+				<div class="content-dot">
+					<i class="bi bi-three-dots"></i>
+					<div class="content-dot-su">
+						<button class="bi bi-star-fill">收藏</button>
+						<button class="bi bi-exclamation-triangle-fill">檢舉</button>
+					</div>
+
+				</div>
+				<div class="content-img">
+					<img src="A.png" width="350px" height="260px" alt="">
+				</div>
+			</div>
+
+		</div>
+
+
+		<div class="container-list">
+
+			<div class="context">
+				<div class="context-title"><a href="https://www.healthsp.org/article/depression_prevention_treatment" target="_blank">如何知道自己有憂鬱症？憂鬱症發作、前兆、症狀、治療，醫師來解答</a></div>
+				<div class="context-text">憂鬱症是一種精神官能症，對人事物失去興趣甚至感到悲傷，且持續一段時間，初期不容易被發現。憂鬱症和單純情緒不好是不一樣的，多數人不會再難過低潮的情緒持續太久，但憂鬱症會維持相當長的一段時間，對於人的感受、行為和思考都會造成影響，嚴重的會造成身體機能問題，影響正常的起居生活、睡眠和工作(1)。台灣憂鬱症防治協會提到目前診斷憂鬱症的標準共有9個症狀，其中只要有5個症狀持續超過兩週，且大部分時間都有達到標準，就要小心得到憂鬱症...</div>
+				<div class="context-footer">
+					<div class="poster">發布者:</div>
+					<div class="post-time">2023-3-30 14:02</div>
+					<div class="post-icon">
+						<i class="bi bi-hand-thumbs-up-fill"></i>
+						<i class="bi bi-chat-text-fill"></i>
+						<i class="bi bi-share-fill"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="content">
+				<div class="content-dot">
+					<i class="bi bi-three-dots"></i>
+					<div class="content-dot-su">
+						<button class="bi bi-star-fill">收藏</button>
+						<button class="bi bi-exclamation-triangle-fill">檢舉</button>
+					</div>
+
+				</div>
+				<div class="content-img">
+					<img src="A.png" width="350px" height="260px" alt="">
+				</div>
+			</div>
+
+		</div>
+
+
+	</div>
+
+*@
+
