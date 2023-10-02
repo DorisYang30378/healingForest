@@ -12,16 +12,14 @@ namespace postArticle.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ChatroomLog
+    public partial class RReportMember
     {
-        public int ChatroomLogID { get; set; }
+        public int RRM_ID { get; set; }
+        public int RM_ID { get; set; }
         public int UserID { get; set; }
-        public int ChatroomID { get; set; }
         public string Content { get; set; }
-        public System.DateTime Time { get; set; }
         public int Status { get; set; }
     
-        public virtual Chatroom Chatroom { get; set; }
-        public virtual UserManage UserManage { get; set; }
+        public virtual ReportMember ReportMember { get; set; }
     }
 }

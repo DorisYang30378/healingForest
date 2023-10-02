@@ -18,6 +18,8 @@ namespace postArticle.Models
         public UserManage()
         {
             this.Article = new HashSet<Article>();
+            this.Chatroom = new HashSet<Chatroom>();
+            this.Chatroom1 = new HashSet<Chatroom>();
             this.ChatroomLog = new HashSet<ChatroomLog>();
             this.Checkin = new HashSet<Checkin>();
             this.Collect = new HashSet<Collect>();
@@ -26,6 +28,8 @@ namespace postArticle.Models
             this.Message = new HashSet<Message>();
             this.Mood = new HashSet<Mood>();
             this.Report = new HashSet<Report>();
+            this.ReportMember = new HashSet<ReportMember>();
+            this.ReportMember1 = new HashSet<ReportMember>();
             this.UserQuestion = new HashSet<UserQuestion>();
         }
     
@@ -38,9 +42,14 @@ namespace postArticle.Models
         public int LevelValue { get; set; }
         public double Experience { get; set; }
         public System.DateTime Birthday { get; set; }
+        public Nullable<int> Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Article> Article { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Chatroom> Chatroom { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Chatroom> Chatroom1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChatroomLog> ChatroomLog { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -57,6 +66,10 @@ namespace postArticle.Models
         public virtual ICollection<Mood> Mood { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Report> Report { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReportMember> ReportMember { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ReportMember> ReportMember1 { get; set; }
         public virtual ThanksfulThings ThanksfulThings { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserQuestion> UserQuestion { get; set; }

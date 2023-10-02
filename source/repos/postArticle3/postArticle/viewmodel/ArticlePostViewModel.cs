@@ -17,7 +17,11 @@ namespace postArticle.viewmodel
         [Display(Name = "專業文章")]
         public bool IsChecked { get; set; }
 
-
+        public ArticleManageViewModel()
+        {
+            article = new Article(); // 初始化 article 对象
+            IsChecked = false; // 初始化 IsChecked 属性
+        }
 
         public string[] Classification =
         {

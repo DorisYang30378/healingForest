@@ -12,23 +12,25 @@ namespace postArticle.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Report
+    public partial class Report_Message
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Report()
+        public Report_Message()
         {
-            this.R_Report = new HashSet<R_Report>();
+            this.RReportMessage = new HashSet<RReportMessage>();
+            this.RReportMessage1 = new HashSet<RReportMessage>();
         }
     
-        public int Report_ID { get; set; }
-        public int UserID { get; set; }
-        public int ArticleID { get; set; }
-        public string ReportContent { get; set; }
+        public int MS_ID { get; set; }
+        public int Message_ID { get; set; }
+        public int User_ID { get; set; }
+        public string Content { get; set; }
         public int Status { get; set; }
     
-        public virtual Article Article { get; set; }
+        public virtual Message Message { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<R_Report> R_Report { get; set; }
-        public virtual UserManage UserManage { get; set; }
+        public virtual ICollection<RReportMessage> RReportMessage { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RReportMessage> RReportMessage1 { get; set; }
     }
 }

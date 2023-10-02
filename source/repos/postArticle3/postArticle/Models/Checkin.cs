@@ -15,8 +15,10 @@ namespace postArticle.Models
     public partial class Checkin
     {
         public int CheckinID { get; set; }
-        public int CheckinRewardsID { get; set; }
+        public Nullable<int> CheckinRewardsID { get; set; }
         public int UserID { get; set; }
+        public System.DateTime CheckInDate { get; set; }
+        public int BoolCheckIn { get; set; }
     
         public virtual CheckinRewards CheckinRewards { get; set; }
         public virtual UserManage UserManage { get; set; }

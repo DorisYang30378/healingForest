@@ -12,8 +12,8 @@ namespace postArticle.Controllers
 {
     public class UserManagesController : Controller
     {
-        #region 基礎屬性
-        private healingForestEntities2 db = new healingForestEntities2();
+        #region 基礎屬性    
+        private healingForestEntities3 db = new healingForestEntities3();
 
         public BasicData basicData = new BasicData();
         public bool CheckLoggedIn() => Session["UserID"] != null;

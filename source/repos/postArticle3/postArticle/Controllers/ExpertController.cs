@@ -11,7 +11,7 @@ namespace postArticle.Controllers
 {
     public class ExpertController : Controller
     {
-        public healingForestEntities2 db = new healingForestEntities2();
+        public healingForestEntities3    db = new healingForestEntities3();
         public bool CheckLoggedIn() => Session["UserID"] != null;
         // GET: Expert
         public ActionResult Index()
@@ -61,7 +61,7 @@ namespace postArticle.Controllers
 
                             // 使用資料庫存取技術將模型物件保存到資料庫中
 
-                            using (healingForestEntities2 dbContext = new healingForestEntities2())
+                            using (healingForestEntities3    dbContext = new healingForestEntities3 ())
                             {
                                 dbContext.ExpertApply.Add(model);
                                 UserManage user = dbContext.UserManage.FirstOrDefault(u => u.UserID == model.UserID);

@@ -12,6 +12,7 @@ using System.IO;
 using System.Web.UI;
 using PagedList;
 using HtmlAgilityPack;
+using System.Data.Entity.Validation;
 
 namespace postArticle.Controllers
 {
@@ -19,7 +20,7 @@ namespace postArticle.Controllers
     {
         //---------------基礎屬性-----------------------------------------
         #region 基礎屬性
-        private healingForestEntities2 db = new healingForestEntities2();
+        private healingForestEntities3 db = new healingForestEntities3();
 
         public BasicData basicData = new BasicData();
         public bool CheckLoggedIn() => Session["UserID"] != null;
@@ -385,11 +386,11 @@ namespace postArticle.Controllers
 
 
         //發布文章
-        public ActionResult ArticlePost([Bind(Include = "IsChecked")] ArticleManageViewModel viewModel)
+        public ActionResult ArticlePost()
         {
             if (CheckLoggedIn())
             {
-               
+                ArticleManageViewModel viewModel = new ArticleManageViewModel();
                 return View(viewModel);
 
             }
@@ -407,73 +408,94 @@ namespace postArticle.Controllers
         [ValidateInput(false)]
         public ActionResult ArticlePost([Bind (Include ="IsChecked")] ArticleManageViewModel articlePost, HttpPostedFileBase file)
         {
-           
-            if (CheckLoggedIn())
+            try
             {
-                if (ModelState.IsValid)
+                if (CheckLoggedIn())
                 {
-                    #region ===搜尋userID===
-                    var UserID = Convert.ToInt32(Session["UserID"]);
-                    var queryUserSQL = from UserManagedb in db.UserManage.Include(u => u.ThanksfulThings)
-                                       where UserManagedb.UserID == UserID
-                                       select new
-                                       {
-                                           UserManagedb.UserType
-                                       };
-
-                    
-                    var user = queryUserSQL.FirstOrDefault();
-                    if (user.UserType.Equals("Expert") && articlePost.IsChecked)
+                    if (ModelState.IsValid)
                     {
-                        articlePost.article.ArticleType = "是";
+                        #region ===搜尋userID===
+                        var UserID = Convert.ToInt32(Session["UserID"]);
+                        var queryUserSQL = from UserManagedb in db.UserManage.Include(u => u.ThanksfulThings)
+                                           where UserManagedb.UserID == UserID
+                                           select new
+                                           {
+                                               UserManagedb.UserType
+                                           };
+
+
+                        var user = queryUserSQL.FirstOrDefault();
+                        if (user != null)
+                        {
+
+                            if (user.UserType.Equals("Expert") && articlePost.IsChecked)
+                            {
+                                articlePost.article.ArticleType = "是";
+                            }
+                            else
+                            {
+                                articlePost.article.ArticleType = "否";
+                            }
+                        }
+                        #endregion
+
+
+                        #region ===設置articlePost的資料======
+                        //新增文件
+                        articlePost.article.ImageURL = "index.png";
+                        // 获取当前时间
+                        articlePost.article.Time = DateTime.Now;
+
+                        articlePost.article.UserID = UserID;
+                        #endregion
+
+
+                        #region ===上傳圖片====
+                        if (file != null && file.ContentLength > 0)
+                        {
+                            var fileName = Guid.NewGuid().ToString() + ".png";
+                            var path = Path.Combine(Server.MapPath("~/Uploads"), fileName);
+                            file.SaveAs(path);
+
+                            articlePost.article.ImageURL = fileName;
+                        }
+                        #endregion
+                        //
+
+                        db.Article.Add(articlePost.article);
+                        db.SaveChanges();
                     }
                     else
                     {
-                        articlePost.article.ArticleType = "否";
+                        var errors = ModelState.Values.SelectMany(v => v.Errors);
+                        var viewModel = new ArticleManageViewModel
+                        {
+                            article = articlePost.article
+                        };
+
+                        return View(viewModel);
                     }
-                    #endregion
-
-
-                    #region ===設置articlePost的資料======
-                    //新增文件
-                    articlePost.article.ImageURL = "index.png";
-                    // 获取当前时间
-                    articlePost.article.Time = DateTime.Now;
-
-                    articlePost.article.UserID = UserID;
-                    #endregion
-
-
-                    #region ===上傳圖片====
-                    if (file != null && file.ContentLength > 0)
-                    {
-                        var fileName = Guid.NewGuid().ToString() + ".png";
-                        var path = Path.Combine(Server.MapPath("~/Uploads"), fileName);
-                        file.SaveAs(path);
-
-                        articlePost.article.ImageURL = fileName;
-                    }
-                    #endregion
-                    //
-
-                    db.Article.Add(articlePost.article);
-                    db.SaveChanges();
                 }
-                else
+
+                return RedirectToAction(basicData.HomeViewString, basicData.HomeControllerString);
+            }catch (DbEntityValidationException ex)
+            {
+                foreach (var entityValidationError in ex.EntityValidationErrors)
                 {
-                    var errors = ModelState.Values.SelectMany(v => v.Errors);
-                    var viewModel = new ArticleManageViewModel
+                    foreach (var validationError in entityValidationError.ValidationErrors)
                     {
-                        article = articlePost.article
-                    };
-
-                    return View(viewModel);
+                        var errorMessage = $"Property: {validationError.PropertyName}, Error: {validationError.ErrorMessage}";
+                        // 这里可以输出错误消息或记录到日志中，以便进一步调试
+                    }
                 }
+                throw; // 将异常继续抛出以中断程序流程
             }
 
-            return RedirectToAction(basicData.HomeViewString, basicData.HomeControllerString);
+
+
 
 
         }
     }
 }
+

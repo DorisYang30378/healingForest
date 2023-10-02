@@ -18,6 +18,7 @@
           <Property Name="ArticleType" Type="varchar" MaxLength="12" Nullable="false" />
           <Property Name="UserID" Type="int" />
           <Property Name="Time" Type="datetime" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Chatroom">
           <Key>
@@ -26,6 +27,8 @@
           <Property Name="ChatroomID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ChatRoomName" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="member" Type="varchar" MaxLength="56" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="OtherUserID" Type="int" />
         </EntityType>
         <EntityType Name="ChatroomLog">
           <Key>
@@ -36,14 +39,17 @@
           <Property Name="ChatroomID" Type="int" Nullable="false" />
           <Property Name="Content" Type="varchar" MaxLength="128" Nullable="false" />
           <Property Name="Time" Type="datetime" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Checkin">
           <Key>
             <PropertyRef Name="CheckinID" />
           </Key>
           <Property Name="CheckinID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CheckinRewardsID" Type="int" Nullable="false" />
+          <Property Name="CheckinRewardsID" Type="int" />
           <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="CheckInDate" Type="date" Nullable="false" />
+          <Property Name="BoolCheckIn" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="CheckinRewards">
           <Key>
@@ -103,14 +109,66 @@
           <Property Name="Mood" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="R_Report">
+          <Key>
+            <PropertyRef Name="RR_ID" />
+          </Key>
+          <Property Name="RR_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReportID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Article_ID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Report">
           <Key>
             <PropertyRef Name="Report ID" />
           </Key>
-          <Property Name="Report ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Report ID" Type="int" Nullable="false" />
           <Property Name="UserID" Type="int" Nullable="false" />
           <Property Name="ArticleID" Type="int" Nullable="false" />
           <Property Name="ReportContent" Type="varchar" MaxLength="128" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Report_Message">
+          <Key>
+            <PropertyRef Name="MS_ID" />
+          </Key>
+          <Property Name="MS_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message_ID" Type="int" Nullable="false" />
+          <Property Name="User_ID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ReportMember">
+          <Key>
+            <PropertyRef Name="RM_ID" />
+          </Key>
+          <Property Name="RM_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="RUserID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RReportMember">
+          <Key>
+            <PropertyRef Name="RRM_ID" />
+          </Key>
+          <Property Name="RRM_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RM_ID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RReportMessage">
+          <Key>
+            <PropertyRef Name="RMS_ID" />
+          </Key>
+          <Property Name="RMS_ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MS_ID" Type="int" Nullable="false" />
+          <Property Name="User_ID" Type="int" Nullable="false" />
+          <Property Name="Content" Type="varchar(max)" Nullable="false" />
+          <Property Name="Status" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ThanksfulThings">
           <Key>
@@ -134,6 +192,7 @@
           <Property Name="LevelValue" Type="int" Nullable="false" />
           <Property Name="Experience" Type="float" Nullable="false" />
           <Property Name="Birthday" Type="date" Nullable="false" />
+          <Property Name="Status" Type="int" />
         </EntityType>
         <EntityType Name="UserQuestion">
           <Key>
@@ -181,6 +240,32 @@
           <Property Name="專家回答" Type="varchar" MaxLength="2048" Nullable="false" />
           <Property Name="回覆時間" Type="date" Nullable="false" />
         </EntityType>
+        <Association Name="Chat_OtherUserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Chatroom">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Chat_UserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1" />
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Chatroom">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="chatLog">
           <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -196,7 +281,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="CheckinReward Record">
-          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="1" />
+          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="0..1" />
           <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CheckinRewards">
@@ -245,6 +330,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_R_Report_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="R_Report" Type="Self.R_Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="Report ID" />
+            </Principal>
+            <Dependent Role="R_Report">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Message_ID">
+          <End Role="Message" Type="Self.Message" Multiplicity="1" />
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Message">
+              <PropertyRef Name="MessageID" />
+            </Principal>
+            <Dependent Role="Report_Message">
+              <PropertyRef Name="Message_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="MessageArticle">
           <End Role="Article" Type="Self.Article" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -256,6 +367,18 @@
             </Principal>
             <Dependent Role="Message">
               <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MS_ID">
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="1" />
+          <End Role="RReportMessage" Type="Self.RReportMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Message">
+              <PropertyRef Name="MS_ID" />
+            </Principal>
+            <Dependent Role="RReportMessage">
+              <PropertyRef Name="MS_ID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -282,6 +405,42 @@
             </Principal>
             <Dependent Role="Report">
               <PropertyRef Name="ArticleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RM_ID">
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="1" />
+          <End Role="RReportMember" Type="Self.RReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReportMember">
+              <PropertyRef Name="RM_ID" />
+            </Principal>
+            <Dependent Role="RReportMember">
+              <PropertyRef Name="RM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RMS_ID">
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="1" />
+          <End Role="RReportMessage" Type="Self.RReportMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Message">
+              <PropertyRef Name="MS_ID" />
+            </Principal>
+            <Dependent Role="RReportMessage">
+              <PropertyRef Name="MS_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RUserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ReportMember">
+              <PropertyRef Name="RUserID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -322,7 +481,9 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="User reports">
-          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserManage">
@@ -381,6 +542,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="UserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ReportMember">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="UserMood">
           <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
           <End Role="Mood" Type="Self.Mood" Multiplicity="*" />
@@ -404,7 +577,12 @@
           <EntitySet Name="ExpertApply" EntityType="Self.ExpertApply" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Message" EntityType="Self.Message" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Mood" EntityType="Self.Mood" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="R_Report" EntityType="Self.R_Report" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report_Message" EntityType="Self.Report_Message" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ReportMember" EntityType="Self.ReportMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RReportMember" EntityType="Self.RReportMember" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RReportMessage" EntityType="Self.RReportMessage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ThanksfulThings" EntityType="Self.ThanksfulThings" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserManage" EntityType="Self.UserManage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserQuestion" EntityType="Self.UserQuestion" Schema="dbo" store:Type="Tables" />
@@ -428,6 +606,14 @@
     [QA].[回覆時間] AS [回覆時間]
     FROM [dbo].[QA] AS [QA]</DefiningQuery>
           </EntitySet>
+          <AssociationSet Name="Chat_OtherUserID" Association="Self.Chat_OtherUserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Chatroom" EntitySet="Chatroom" />
+          </AssociationSet>
+          <AssociationSet Name="Chat_UserID" Association="Self.Chat_UserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Chatroom" EntitySet="Chatroom" />
+          </AssociationSet>
           <AssociationSet Name="chatLog" Association="Self.chatLog">
             <End Role="Chatroom" EntitySet="Chatroom" />
             <End Role="ChatroomLog" EntitySet="ChatroomLog" />
@@ -448,9 +634,21 @@
             <End Role="UserQuestion" EntitySet="UserQuestion" />
             <End Role="ExpertAnswer" EntitySet="ExpertAnswer" />
           </AssociationSet>
+          <AssociationSet Name="FK_R_Report_Report" Association="Self.FK_R_Report_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="R_Report" EntitySet="R_Report" />
+          </AssociationSet>
+          <AssociationSet Name="Message_ID" Association="Self.Message_ID">
+            <End Role="Message" EntitySet="Message" />
+            <End Role="Report_Message" EntitySet="Report_Message" />
+          </AssociationSet>
           <AssociationSet Name="MessageArticle" Association="Self.MessageArticle">
             <End Role="Article" EntitySet="Article" />
             <End Role="Message" EntitySet="Message" />
+          </AssociationSet>
+          <AssociationSet Name="MS_ID" Association="Self.MS_ID">
+            <End Role="Report_Message" EntitySet="Report_Message" />
+            <End Role="RReportMessage" EntitySet="RReportMessage" />
           </AssociationSet>
           <AssociationSet Name="Relationship1" Association="Self.Relationship1">
             <End Role="UserManage" EntitySet="UserManage" />
@@ -459,6 +657,18 @@
           <AssociationSet Name="reportsarticle" Association="Self.reportsarticle">
             <End Role="Article" EntitySet="Article" />
             <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="RM_ID" Association="Self.RM_ID">
+            <End Role="ReportMember" EntitySet="ReportMember" />
+            <End Role="RReportMember" EntitySet="RReportMember" />
+          </AssociationSet>
+          <AssociationSet Name="RMS_ID" Association="Self.RMS_ID">
+            <End Role="Report_Message" EntitySet="Report_Message" />
+            <End Role="RReportMessage" EntitySet="RReportMessage" />
+          </AssociationSet>
+          <AssociationSet Name="RUserID" Association="Self.RUserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ReportMember" EntitySet="ReportMember" />
           </AssociationSet>
           <AssociationSet Name="User applies to be an expert" Association="Self.User applies to be an expert">
             <End Role="UserManage" EntitySet="UserManage" />
@@ -492,6 +702,10 @@
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Article" EntitySet="Article" />
           </AssociationSet>
+          <AssociationSet Name="UserID" Association="Self.UserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ReportMember" EntitySet="ReportMember" />
+          </AssociationSet>
           <AssociationSet Name="UserMood" Association="Self.UserMood">
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Mood" EntitySet="Mood" />
@@ -515,6 +729,7 @@
           <Property Name="ArticleType" Type="String" MaxLength="12" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UserID" Type="Int32" />
           <Property Name="Time" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Collect" Relationship="Self.CollectArticle" FromRole="Article" ToRole="Collect" />
           <NavigationProperty Name="Message" Relationship="Self.MessageArticle" FromRole="Article" ToRole="Message" />
           <NavigationProperty Name="Report" Relationship="Self.reportsarticle" FromRole="Article" ToRole="Report" />
@@ -527,6 +742,10 @@
           <Property Name="ChatroomID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ChatRoomName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="member" Type="String" MaxLength="56" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="OtherUserID" Type="Int32" />
+          <NavigationProperty Name="UserManage" Relationship="Self.Chat_OtherUserID" FromRole="Chatroom" ToRole="UserManage" />
+          <NavigationProperty Name="UserManage1" Relationship="Self.Chat_UserID" FromRole="Chatroom" ToRole="UserManage" />
           <NavigationProperty Name="ChatroomLog" Relationship="Self.chatLog" FromRole="Chatroom" ToRole="ChatroomLog" />
         </EntityType>
         <EntityType Name="ChatroomLog">
@@ -538,6 +757,7 @@
           <Property Name="ChatroomID" Type="Int32" Nullable="false" />
           <Property Name="Content" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Chatroom" Relationship="Self.chatLog" FromRole="ChatroomLog" ToRole="Chatroom" />
           <NavigationProperty Name="UserManage" Relationship="Self.User_Send_Message" FromRole="ChatroomLog" ToRole="UserManage" />
         </EntityType>
@@ -546,8 +766,10 @@
             <PropertyRef Name="CheckinID" />
           </Key>
           <Property Name="CheckinID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CheckinRewardsID" Type="Int32" Nullable="false" />
+          <Property Name="CheckinRewardsID" Type="Int32" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="CheckInDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="BoolCheckIn" Type="Int32" Nullable="false" />
           <NavigationProperty Name="CheckinRewards" Relationship="Self.CheckinReward_Record" FromRole="Checkin" ToRole="CheckinRewards" />
           <NavigationProperty Name="UserManage" Relationship="Self.UserCheckin" FromRole="Checkin" ToRole="UserManage" />
         </EntityType>
@@ -606,6 +828,7 @@
           <Property Name="Content" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Time" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Article" Relationship="Self.MessageArticle" FromRole="Message" ToRole="Article" />
+          <NavigationProperty Name="Report_Message" Relationship="Self.Message_ID" FromRole="Message" ToRole="Report_Message" />
           <NavigationProperty Name="UserManage" Relationship="Self.User_Message" FromRole="Message" ToRole="UserManage" />
         </EntityType>
         <EntityType Name="Mood">
@@ -618,16 +841,79 @@
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="UserManage" Relationship="Self.UserMood" FromRole="Mood" ToRole="UserManage" />
         </EntityType>
+        <EntityType Name="R_Report">
+          <Key>
+            <PropertyRef Name="RR_ID" />
+          </Key>
+          <Property Name="RR_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReportID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Article_ID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report" Relationship="Self.FK_R_Report_Report" FromRole="R_Report" ToRole="Report" />
+        </EntityType>
         <EntityType Name="Report">
           <Key>
             <PropertyRef Name="Report_ID" />
           </Key>
-          <Property Name="Report_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Report_ID" Type="Int32" Nullable="false" />
           <Property Name="UserID" Type="Int32" Nullable="false" />
           <Property Name="ArticleID" Type="Int32" Nullable="false" />
           <Property Name="ReportContent" Type="String" MaxLength="128" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Article" Relationship="Self.reportsarticle" FromRole="Report" ToRole="Article" />
+          <NavigationProperty Name="R_Report" Relationship="Self.FK_R_Report_Report" FromRole="Report" ToRole="R_Report" />
           <NavigationProperty Name="UserManage" Relationship="Self.User_reports" FromRole="Report" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="Report_Message">
+          <Key>
+            <PropertyRef Name="MS_ID" />
+          </Key>
+          <Property Name="MS_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message_ID" Type="Int32" Nullable="false" />
+          <Property Name="User_ID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Message" Relationship="Self.Message_ID" FromRole="Report_Message" ToRole="Message" />
+          <NavigationProperty Name="RReportMessage" Relationship="Self.MS_ID" FromRole="Report_Message" ToRole="RReportMessage" />
+          <NavigationProperty Name="RReportMessage1" Relationship="Self.RMS_ID" FromRole="Report_Message" ToRole="RReportMessage" />
+        </EntityType>
+        <EntityType Name="ReportMember">
+          <Key>
+            <PropertyRef Name="RM_ID" />
+          </Key>
+          <Property Name="RM_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="RUserID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RReportMember" Relationship="Self.RM_ID" FromRole="ReportMember" ToRole="RReportMember" />
+          <NavigationProperty Name="UserManage" Relationship="Self.RUserID" FromRole="ReportMember" ToRole="UserManage" />
+          <NavigationProperty Name="UserManage1" Relationship="Self.UserID" FromRole="ReportMember" ToRole="UserManage" />
+        </EntityType>
+        <EntityType Name="RReportMember">
+          <Key>
+            <PropertyRef Name="RRM_ID" />
+          </Key>
+          <Property Name="RRM_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RM_ID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ReportMember" Relationship="Self.RM_ID" FromRole="RReportMember" ToRole="ReportMember" />
+        </EntityType>
+        <EntityType Name="RReportMessage">
+          <Key>
+            <PropertyRef Name="RMS_ID" />
+          </Key>
+          <Property Name="RMS_ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MS_ID" Type="Int32" Nullable="false" />
+          <Property Name="User_ID" Type="Int32" Nullable="false" />
+          <Property Name="Content" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Report_Message" Relationship="Self.MS_ID" FromRole="RReportMessage" ToRole="Report_Message" />
+          <NavigationProperty Name="Report_Message1" Relationship="Self.RMS_ID" FromRole="RReportMessage" ToRole="Report_Message" />
         </EntityType>
         <EntityType Name="ThanksfulThings">
           <Key>
@@ -652,7 +938,10 @@
           <Property Name="LevelValue" Type="Int32" Nullable="false" />
           <Property Name="Experience" Type="Double" Nullable="false" />
           <Property Name="Birthday" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Status" Type="Int32" />
           <NavigationProperty Name="Article" Relationship="Self.UserCreateArticle" FromRole="UserManage" ToRole="Article" />
+          <NavigationProperty Name="Chatroom" Relationship="Self.Chat_OtherUserID" FromRole="UserManage" ToRole="Chatroom" />
+          <NavigationProperty Name="Chatroom1" Relationship="Self.Chat_UserID" FromRole="UserManage" ToRole="Chatroom" />
           <NavigationProperty Name="ChatroomLog" Relationship="Self.User_Send_Message" FromRole="UserManage" ToRole="ChatroomLog" />
           <NavigationProperty Name="Checkin" Relationship="Self.UserCheckin" FromRole="UserManage" ToRole="Checkin" />
           <NavigationProperty Name="Collect" Relationship="Self.UserCollect" FromRole="UserManage" ToRole="Collect" />
@@ -661,6 +950,8 @@
           <NavigationProperty Name="Message" Relationship="Self.User_Message" FromRole="UserManage" ToRole="Message" />
           <NavigationProperty Name="Mood" Relationship="Self.UserMood" FromRole="UserManage" ToRole="Mood" />
           <NavigationProperty Name="Report" Relationship="Self.User_reports" FromRole="UserManage" ToRole="Report" />
+          <NavigationProperty Name="ReportMember" Relationship="Self.RUserID" FromRole="UserManage" ToRole="ReportMember" />
+          <NavigationProperty Name="ReportMember1" Relationship="Self.UserID" FromRole="UserManage" ToRole="ReportMember" />
           <NavigationProperty Name="ThanksfulThings" Relationship="Self.Relationship1" FromRole="UserManage" ToRole="ThanksfulThings" />
           <NavigationProperty Name="UserQuestion" Relationship="Self.User_asks_a_question" FromRole="UserManage" ToRole="UserQuestion" />
         </EntityType>
@@ -762,6 +1053,32 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Chat_OtherUserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Chatroom">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="Chat_UserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="0..1" />
+          <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Chatroom">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="chatLog">
           <End Role="Chatroom" Type="Self.Chatroom" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -789,7 +1106,7 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="CheckinReward_Record">
-          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="1" />
+          <End Role="CheckinRewards" Type="Self.CheckinRewards" Multiplicity="0..1" />
           <End Role="Checkin" Type="Self.Checkin" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="CheckinRewards">
@@ -860,6 +1177,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="Message_ID">
+          <End Role="Message" Type="Self.Message" Multiplicity="1" />
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Message">
+              <PropertyRef Name="MessageID" />
+            </Principal>
+            <Dependent Role="Report_Message">
+              <PropertyRef Name="Message_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="User_Message">
           <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
           <End Role="Message" Type="Self.Message" Multiplicity="*" />
@@ -884,14 +1213,90 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_R_Report_Report">
+          <End Role="Report" Type="Self.Report" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="R_Report" Type="Self.R_Report" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report">
+              <PropertyRef Name="Report_ID" />
+            </Principal>
+            <Dependent Role="R_Report">
+              <PropertyRef Name="ReportID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="User_reports">
-          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
           <End Role="Report" Type="Self.Report" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="UserManage">
               <PropertyRef Name="UserID" />
             </Principal>
             <Dependent Role="Report">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MS_ID">
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="1" />
+          <End Role="RReportMessage" Type="Self.RReportMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Message">
+              <PropertyRef Name="MS_ID" />
+            </Principal>
+            <Dependent Role="RReportMessage">
+              <PropertyRef Name="MS_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RMS_ID">
+          <End Role="Report_Message" Type="Self.Report_Message" Multiplicity="1" />
+          <End Role="RReportMessage" Type="Self.RReportMessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Report_Message">
+              <PropertyRef Name="MS_ID" />
+            </Principal>
+            <Dependent Role="RReportMessage">
+              <PropertyRef Name="MS_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RM_ID">
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="1" />
+          <End Role="RReportMember" Type="Self.RReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ReportMember">
+              <PropertyRef Name="RM_ID" />
+            </Principal>
+            <Dependent Role="RReportMember">
+              <PropertyRef Name="RM_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RUserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ReportMember">
+              <PropertyRef Name="RUserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UserID">
+          <End Role="UserManage" Type="Self.UserManage" Multiplicity="1" />
+          <End Role="ReportMember" Type="Self.ReportMember" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UserManage">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="ReportMember">
               <PropertyRef Name="UserID" />
             </Dependent>
           </ReferentialConstraint>
@@ -920,7 +1325,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="healingForestEntities2" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="healingForestEntities3" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Article" EntityType="Self.Article" />
           <EntitySet Name="Chatroom" EntityType="Self.Chatroom" />
           <EntitySet Name="ChatroomLog" EntityType="Self.ChatroomLog" />
@@ -931,7 +1336,12 @@
           <EntitySet Name="ExpertApply" EntityType="Self.ExpertApply" />
           <EntitySet Name="Message" EntityType="Self.Message" />
           <EntitySet Name="Mood" EntityType="Self.Mood" />
+          <EntitySet Name="R_Report" EntityType="Self.R_Report" />
           <EntitySet Name="Report" EntityType="Self.Report" />
+          <EntitySet Name="Report_Message" EntityType="Self.Report_Message" />
+          <EntitySet Name="ReportMember" EntityType="Self.ReportMember" />
+          <EntitySet Name="RReportMember" EntityType="Self.RReportMember" />
+          <EntitySet Name="RReportMessage" EntityType="Self.RReportMessage" />
           <EntitySet Name="ThanksfulThings" EntityType="Self.ThanksfulThings" />
           <EntitySet Name="UserManage" EntityType="Self.UserManage" />
           <EntitySet Name="UserQuestion" EntityType="Self.UserQuestion" />
@@ -952,6 +1362,14 @@
           <AssociationSet Name="UserCreateArticle" Association="Self.UserCreateArticle">
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Article" EntitySet="Article" />
+          </AssociationSet>
+          <AssociationSet Name="Chat_OtherUserID" Association="Self.Chat_OtherUserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Chatroom" EntitySet="Chatroom" />
+          </AssociationSet>
+          <AssociationSet Name="Chat_UserID" Association="Self.Chat_UserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="Chatroom" EntitySet="Chatroom" />
           </AssociationSet>
           <AssociationSet Name="chatLog" Association="Self.chatLog">
             <End Role="Chatroom" EntitySet="Chatroom" />
@@ -985,6 +1403,10 @@
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="ExpertApply" EntitySet="ExpertApply" />
           </AssociationSet>
+          <AssociationSet Name="Message_ID" Association="Self.Message_ID">
+            <End Role="Message" EntitySet="Message" />
+            <End Role="Report_Message" EntitySet="Report_Message" />
+          </AssociationSet>
           <AssociationSet Name="User_Message" Association="Self.User_Message">
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Message" EntitySet="Message" />
@@ -993,9 +1415,33 @@
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Mood" EntitySet="Mood" />
           </AssociationSet>
+          <AssociationSet Name="FK_R_Report_Report" Association="Self.FK_R_Report_Report">
+            <End Role="Report" EntitySet="Report" />
+            <End Role="R_Report" EntitySet="R_Report" />
+          </AssociationSet>
           <AssociationSet Name="User_reports" Association="Self.User_reports">
             <End Role="UserManage" EntitySet="UserManage" />
             <End Role="Report" EntitySet="Report" />
+          </AssociationSet>
+          <AssociationSet Name="MS_ID" Association="Self.MS_ID">
+            <End Role="Report_Message" EntitySet="Report_Message" />
+            <End Role="RReportMessage" EntitySet="RReportMessage" />
+          </AssociationSet>
+          <AssociationSet Name="RMS_ID" Association="Self.RMS_ID">
+            <End Role="Report_Message" EntitySet="Report_Message" />
+            <End Role="RReportMessage" EntitySet="RReportMessage" />
+          </AssociationSet>
+          <AssociationSet Name="RM_ID" Association="Self.RM_ID">
+            <End Role="ReportMember" EntitySet="ReportMember" />
+            <End Role="RReportMember" EntitySet="RReportMember" />
+          </AssociationSet>
+          <AssociationSet Name="RUserID" Association="Self.RUserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ReportMember" EntitySet="ReportMember" />
+          </AssociationSet>
+          <AssociationSet Name="UserID" Association="Self.UserID">
+            <End Role="UserManage" EntitySet="UserManage" />
+            <End Role="ReportMember" EntitySet="ReportMember" />
           </AssociationSet>
           <AssociationSet Name="Relationship1" Association="Self.Relationship1">
             <End Role="UserManage" EntitySet="UserManage" />
@@ -1011,7 +1457,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="healingForestModelStoreContainer" CdmEntityContainer="healingForestEntities2">
+        <EntityContainerMapping StorageEntityContainer="healingForestModelStoreContainer" CdmEntityContainer="healingForestEntities3">
           <EntitySetMapping Name="Article">
             <EntityTypeMapping TypeName="healingForestModel.Article">
               <MappingFragment StoreEntitySet="Article">
@@ -1024,6 +1470,7 @@
                 <ScalarProperty Name="ArticleType" ColumnName="ArticleType" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1033,6 +1480,8 @@
                 <ScalarProperty Name="ChatroomID" ColumnName="ChatroomID" />
                 <ScalarProperty Name="ChatRoomName" ColumnName="ChatRoomName" />
                 <ScalarProperty Name="member" ColumnName="member" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="OtherUserID" ColumnName="OtherUserID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1044,6 +1493,7 @@
                 <ScalarProperty Name="ChatroomID" ColumnName="ChatroomID" />
                 <ScalarProperty Name="Content" ColumnName="Content" />
                 <ScalarProperty Name="Time" ColumnName="Time" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1053,6 +1503,8 @@
                 <ScalarProperty Name="CheckinID" ColumnName="CheckinID" />
                 <ScalarProperty Name="CheckinRewardsID" ColumnName="CheckinRewardsID" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CheckInDate" ColumnName="CheckInDate" />
+                <ScalarProperty Name="BoolCheckIn" ColumnName="BoolCheckIn" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1119,6 +1571,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="R_Report">
+            <EntityTypeMapping TypeName="healingForestModel.R_Report">
+              <MappingFragment StoreEntitySet="R_Report">
+                <ScalarProperty Name="RR_ID" ColumnName="RR_ID" />
+                <ScalarProperty Name="ReportID" ColumnName="ReportID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Article_ID" ColumnName="Article_ID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Report">
             <EntityTypeMapping TypeName="healingForestModel.Report">
               <MappingFragment StoreEntitySet="Report">
@@ -1126,6 +1590,51 @@
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="ArticleID" ColumnName="ArticleID" />
                 <ScalarProperty Name="ReportContent" ColumnName="ReportContent" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Report_Message">
+            <EntityTypeMapping TypeName="healingForestModel.Report_Message">
+              <MappingFragment StoreEntitySet="Report_Message">
+                <ScalarProperty Name="MS_ID" ColumnName="MS_ID" />
+                <ScalarProperty Name="Message_ID" ColumnName="Message_ID" />
+                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ReportMember">
+            <EntityTypeMapping TypeName="healingForestModel.ReportMember">
+              <MappingFragment StoreEntitySet="ReportMember">
+                <ScalarProperty Name="RM_ID" ColumnName="RM_ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="RUserID" ColumnName="RUserID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RReportMember">
+            <EntityTypeMapping TypeName="healingForestModel.RReportMember">
+              <MappingFragment StoreEntitySet="RReportMember">
+                <ScalarProperty Name="RRM_ID" ColumnName="RRM_ID" />
+                <ScalarProperty Name="RM_ID" ColumnName="RM_ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RReportMessage">
+            <EntityTypeMapping TypeName="healingForestModel.RReportMessage">
+              <MappingFragment StoreEntitySet="RReportMessage">
+                <ScalarProperty Name="RMS_ID" ColumnName="RMS_ID" />
+                <ScalarProperty Name="MS_ID" ColumnName="MS_ID" />
+                <ScalarProperty Name="User_ID" ColumnName="User_ID" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1151,6 +1660,7 @@
                 <ScalarProperty Name="LevelValue" ColumnName="LevelValue" />
                 <ScalarProperty Name="Experience" ColumnName="Experience" />
                 <ScalarProperty Name="Birthday" ColumnName="Birthday" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

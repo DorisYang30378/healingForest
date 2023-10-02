@@ -14,6 +14,12 @@ namespace postArticle.Models
     
     public partial class Message
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Message()
+        {
+            this.Report_Message = new HashSet<Report_Message>();
+        }
+    
         public int MessageID { get; set; }
         public int UserID { get; set; }
         public int ArticleID { get; set; }
@@ -21,6 +27,8 @@ namespace postArticle.Models
         public System.DateTime Time { get; set; }
     
         public virtual Article Article { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Report_Message> Report_Message { get; set; }
         public virtual UserManage UserManage { get; set; }
     }
 }

@@ -13,10 +13,10 @@ namespace postArticle.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class healingForestEntities2 : DbContext
+    public partial class healingForestEntities3 : DbContext
     {
-        public healingForestEntities2()
-            : base("name=healingForestEntities2")
+        public healingForestEntities3()
+            : base("name=healingForestEntities3")
         {
         }
     
@@ -35,7 +35,12 @@ namespace postArticle.Models
         public virtual DbSet<ExpertApply> ExpertApply { get; set; }
         public virtual DbSet<Message> Message { get; set; }
         public virtual DbSet<Mood> Mood { get; set; }
+        public virtual DbSet<R_Report> R_Report { get; set; }
         public virtual DbSet<Report> Report { get; set; }
+        public virtual DbSet<Report_Message> Report_Message { get; set; }
+        public virtual DbSet<ReportMember> ReportMember { get; set; }
+        public virtual DbSet<RReportMember> RReportMember { get; set; }
+        public virtual DbSet<RReportMessage> RReportMessage { get; set; }
         public virtual DbSet<ThanksfulThings> ThanksfulThings { get; set; }
         public virtual DbSet<UserManage> UserManage { get; set; }
         public virtual DbSet<UserQuestion> UserQuestion { get; set; }

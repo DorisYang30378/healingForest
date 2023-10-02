@@ -23,7 +23,11 @@ namespace postArticle.Models
         public int ChatroomID { get; set; }
         public string ChatRoomName { get; set; }
         public string member { get; set; }
+        public Nullable<int> UserID { get; set; }
+        public Nullable<int> OtherUserID { get; set; }
     
+        public virtual UserManage UserManage { get; set; }
+        public virtual UserManage UserManage1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ChatroomLog> ChatroomLog { get; set; }
     }

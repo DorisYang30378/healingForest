@@ -31,6 +31,7 @@ namespace postArticle.Models
         public string ArticleType { get; set; }
         public Nullable<int> UserID { get; set; }
         public Nullable<System.DateTime> Time { get; set; }
+        public int Status { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Collect> Collect { get; set; }
